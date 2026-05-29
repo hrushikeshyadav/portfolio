@@ -15,7 +15,7 @@ export default function About() {
   return (
     <section id="about" ref={ref} style={{
       padding: 'clamp(7rem, 14vw, 12rem) 1.5rem',
-      background: '#000',
+      background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.6) 45%, #000)',
       position: 'relative',
     }}>
       <div style={{

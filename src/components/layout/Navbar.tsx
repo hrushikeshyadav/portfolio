@@ -23,14 +23,20 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', fn)
   }, [])
 
+  const scrollTo = (href: string) => {
+    const el = document.querySelector(href) as HTMLElement | null
+    if (!el) return
+    const lenis = (window as unknown as { lenis?: { scrollTo: (t: HTMLElement, o?: object) => void } }).lenis
+    if (lenis) lenis.scrollTo(el, { offset: -64, duration: 1.2 })
+    else el.scrollIntoView({ behavior: 'smooth' })
+  }
+
   const go = (href: string) => {
     setOpen(false)
     if (isOnResume) {
-      navigate({ to: '/' }).then(() => {
-        setTimeout(() => document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' }), 100)
-      })
+      navigate({ to: '/' }).then(() => setTimeout(() => scrollTo(href), 120))
     } else {
-      document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
+      scrollTo(href)
     }
   }
 

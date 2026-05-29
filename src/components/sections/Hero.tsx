@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowDownRight, ArrowUpRight } from 'lucide-react'
-import ParticleField from '../3d/ParticleField'
+import Magnetic from '../ui/Magnetic'
 
 const ROLES = ['Full Stack Engineer', 'GraphQL Architect', 'React Specialist', 'AI Builder']
 
@@ -13,8 +13,8 @@ export default function Hero() {
   const [mounted, setMounted] = useState(false)
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '18%'])
-  const opacity = useTransform(scrollYProgress, [0, 0.55], [1, 0])
+  const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0])
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '12%'])
 
   useEffect(() => { setMounted(true) }, [])
 
@@ -24,13 +24,13 @@ export default function Hero() {
     let t: ReturnType<typeof setTimeout>
     if (typing) {
       const type = () => {
-        if (i <= current.length) { setDisplayed(current.slice(0, i++)); t = setTimeout(type, 48) }
-        else t = setTimeout(() => setTyping(false), 2400)
+        if (i <= current.length) { setDisplayed(current.slice(0, i++)); t = setTimeout(type, 52) }
+        else t = setTimeout(() => setTyping(false), 2600)
       }
       type()
     } else {
       const erase = () => {
-        if (i >= 0) { setDisplayed(current.slice(0, i--)); t = setTimeout(erase, 22) }
+        if (i >= 0) { setDisplayed(current.slice(0, i--)); t = setTimeout(erase, 24) }
         else { setRoleIdx(r => (r + 1) % ROLES.length); setTyping(true) }
       }
       i = current.length; erase()
@@ -43,124 +43,114 @@ export default function Hero() {
   return (
     <section ref={ref} style={{
       position: 'relative', minHeight: '100dvh',
-      overflow: 'hidden', background: '#000',
+      background: 'transparent',
       display: 'flex', flexDirection: 'column',
+      overflow: 'hidden',
     }}>
-      {/* Particle bg */}
-      <ParticleField style={{ zIndex: 0 }} />
-
-      {/* Radial gradient */}
+      {/* Very subtle radial glow */}
       <div style={{
-        position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
-        background: 'radial-gradient(ellipse 70% 50% at 50% 100%, rgba(255,69,0,0.09) 0%, transparent 70%)',
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        background: 'radial-gradient(ellipse 80% 60% at 50% 110%, rgba(255,69,0,0.07) 0%, transparent 65%)',
       }} />
 
-      {/* Bottom fade */}
+      {/* Thin grid lines */}
       <div style={{
-        position: 'absolute', bottom: 0, left: 0, right: 0, height: '28%', zIndex: 2,
-        background: 'linear-gradient(to top, #000 0%, transparent 100%)',
-        pointerEvents: 'none',
+        position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.025,
+        backgroundImage: 'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
+        backgroundSize: '80px 80px',
       }} />
 
-      {/* Content */}
-      <motion.div style={{ y, opacity, position: 'relative', zIndex: 3, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: 'clamp(6rem,11vw,8rem) 1.5rem 2rem', width: '100%' }}>
+      <motion.div style={{ y, opacity, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative', zIndex: 2 }}>
+        <div style={{ padding: 'clamp(7rem,12vw,9rem) clamp(1.5rem,5vw,4rem) 3rem', width: '100%', maxWidth: 1440, margin: '0 auto' }}>
 
           {/* Available badge */}
           {mounted && (
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              style={{ marginBottom: '2.5rem' }}
-            >
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} style={{ marginBottom: '3rem' }}>
               <span style={{
                 display: 'inline-flex', alignItems: 'center', gap: 8,
-                padding: '0.38rem 1rem',
+                padding: '0.4rem 1rem',
+                border: '1px solid rgba(48,209,88,0.3)',
                 background: 'rgba(48,209,88,0.06)',
-                border: '1px solid rgba(48,209,88,0.2)',
                 fontFamily: "'DM Mono', monospace",
-                fontSize: '0.66rem', color: '#30d158',
-                letterSpacing: '0.12em', textTransform: 'uppercase',
+                fontSize: '0.62rem', color: '#30d158', letterSpacing: '0.14em', textTransform: 'uppercase',
               }}>
-                <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#30d158', boxShadow: '0 0 8px #30d158', flexShrink: 0 }} />
-                Open to work
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#30d158', boxShadow: '0 0 8px #30d158' }} />
+                Available for work
               </span>
             </motion.div>
           )}
 
-          {/* Name — two lines, massive */}
-          <div style={{ overflow: 'hidden', marginBottom: '0.1em' }}>
+          {/* MASSIVE NAME */}
+          <div style={{ overflow: 'hidden', lineHeight: 0.85, marginBottom: '0.08em' }}>
             {mounted && (
-              <motion.h1
-                initial={{ y: '105%' }}
+              <motion.div
+                initial={{ y: '110%' }}
                 animate={{ y: 0 }}
-                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+                transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
                 style={{
                   fontFamily: "'Bricolage Grotesque', sans-serif",
                   fontWeight: 800,
-                  fontSize: 'clamp(3.8rem, 10.5vw, 11rem)',
-                  lineHeight: 0.9, letterSpacing: '-0.04em',
-                  color: '#f5f5f7', margin: 0, display: 'block',
+                  fontSize: 'clamp(4.5rem, 15.5vw, 15rem)',
+                  letterSpacing: '-0.045em',
+                  color: '#f5f5f7',
+                  lineHeight: 0.85,
+                  whiteSpace: 'nowrap',
                 }}
-              >Hrushikesh</motion.h1>
-            )}
-          </div>
-          <div style={{ overflow: 'hidden', marginBottom: 'clamp(1.5rem, 3vw, 2.5rem)' }}>
-            {mounted && (
-              <motion.h1
-                initial={{ y: '105%' }}
-                animate={{ y: 0 }}
-                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.25 }}
-                style={{
-                  fontFamily: "'Bricolage Grotesque', sans-serif",
-                  fontWeight: 800,
-                  fontSize: 'clamp(3.8rem, 10.5vw, 11rem)',
-                  lineHeight: 0.9, letterSpacing: '-0.04em',
-                  color: 'transparent',
-                  WebkitTextStroke: '1.5px rgba(245,245,247,0.22)',
-                  margin: 0, display: 'block',
-                }}
-              >Yadav</motion.h1>
+              >Hrushikesh</motion.div>
             )}
           </div>
 
-          {/* Role line + bio */}
+          <div style={{ overflow: 'hidden', lineHeight: 0.85, marginBottom: 'clamp(2rem,4vw,3.5rem)' }}>
+            {mounted && (
+              <motion.div
+                initial={{ y: '110%' }}
+                animate={{ y: 0 }}
+                transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.22 }}
+                style={{
+                  fontFamily: "'Bricolage Grotesque', sans-serif",
+                  fontWeight: 800,
+                  fontSize: 'clamp(4.5rem, 15.5vw, 15rem)',
+                  letterSpacing: '-0.045em',
+                  lineHeight: 0.85,
+                  WebkitTextStroke: 'clamp(1px, 0.1vw, 2px) rgba(245,245,247,0.3)',
+                  color: 'transparent',
+                  whiteSpace: 'nowrap',
+                }}
+              >Yadav.</motion.div>
+            )}
+          </div>
+
+          {/* Role + Bio */}
           {mounted && (
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.45 }}
-              style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginBottom: 'clamp(2rem, 4vw, 3rem)' }}
+              transition={{ duration: 0.7, delay: 0.5 }}
+              style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 'clamp(1rem,3vw,3rem)', marginBottom: 'clamp(2rem,4vw,3rem)' }}
             >
-              {/* Typewriter role */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <span style={{
-                  width: 24, height: 1.5, background: '#ff4500', display: 'inline-block', flexShrink: 0,
-                }} />
+              {/* Divider + role */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                <div style={{ width: 'clamp(24px,4vw,48px)', height: 1, background: '#ff4500' }} />
                 <span style={{
                   fontFamily: "'DM Mono', monospace",
-                  fontSize: 'clamp(0.8rem, 1.4vw, 0.95rem)',
+                  fontSize: 'clamp(0.72rem,1.2vw,0.9rem)',
                   color: '#ff4500', letterSpacing: '0.04em',
-                  minHeight: '1.4em', display: 'inline-block',
+                  minWidth: 240, display: 'inline-block',
                 }}>
                   {displayed}
-                  <span style={{
-                    display: 'inline-block', width: '2px', height: '1em',
-                    background: '#ff4500', marginLeft: 2, verticalAlign: 'middle',
-                    animation: 'blink 1s step-end infinite',
-                  }} />
+                  <span style={{ display: 'inline-block', width: 2, height: '0.9em', background: '#ff4500', marginLeft: 2, verticalAlign: 'middle', animation: 'blink 1s step-end infinite' }} />
                 </span>
               </div>
+
               <p style={{
                 fontFamily: "'Bricolage Grotesque', sans-serif",
-                fontSize: 'clamp(0.92rem, 1.4vw, 1.05rem)',
-                color: 'rgba(245,245,247,0.38)',
-                lineHeight: 1.75, maxWidth: 500, letterSpacing: '-0.01em', margin: 0,
+                fontSize: 'clamp(0.9rem,1.3vw,1.05rem)',
+                color: 'rgba(245,245,247,0.4)',
+                lineHeight: 1.7, maxWidth: 420, letterSpacing: '-0.01em', margin: 0,
               }}>
-                Building production SaaS, AI agents and dev tooling at{' '}
-                <span style={{ color: 'rgba(245,245,247,0.7)', fontWeight: 600 }}>Logicwind</span>.
-                React · GraphQL · TypeScript · Three.js
+                Building production SaaS & AI platforms at{' '}
+                <span style={{ color: 'rgba(245,245,247,0.75)', fontWeight: 600 }}>Logicwind</span>
+                {' '}— React · GraphQL · TypeScript
               </p>
             </motion.div>
           )}
@@ -170,102 +160,81 @@ export default function Hero() {
             <motion.div
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}
+              transition={{ duration: 0.6, delay: 0.65 }}
+              style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}
             >
-              <button onClick={scrollDown}
-                style={{
+              <Magnetic strength={0.5}>
+                <button onClick={scrollDown} style={{
                   display: 'flex', alignItems: 'center', gap: 8,
-                  padding: '0.85rem 2rem',
+                  padding: '0.9rem 2.25rem',
                   background: '#ff4500', color: '#000',
                   fontFamily: "'Bricolage Grotesque', sans-serif",
-                  fontWeight: 700, fontSize: '0.9rem',
-                  border: 'none', letterSpacing: '-0.01em',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s cubic-bezier(0.16,1,0.3,1)',
+                  fontWeight: 700, fontSize: '0.9rem', border: 'none',
+                  letterSpacing: '-0.01em', cursor: 'pointer',
+                  boxShadow: '0 12px 40px rgba(255,69,0,0.25)',
                 }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.transform = 'translateY(-3px)'
-                  e.currentTarget.style.boxShadow = '0 20px 50px rgba(255,69,0,0.4)'
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.transform = ''
-                  e.currentTarget.style.boxShadow = ''
-                }}
-              >
-                View Work <ArrowDownRight size={16} />
-              </button>
-              <a href="mailto:yadavhrushikesh21@gmail.com"
-                style={{
+                >
+                  View Work <ArrowDownRight size={16} />
+                </button>
+              </Magnetic>
+              <Magnetic strength={0.4}>
+                <a href="mailto:yadavhrushikesh21@gmail.com" style={{
                   display: 'flex', alignItems: 'center', gap: 8,
-                  padding: '0.85rem 2rem',
-                  background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  color: 'rgba(245,245,247,0.55)',
+                  padding: '0.9rem 2.25rem',
+                  background: 'transparent',
+                  border: '1px solid rgba(245,245,247,0.15)',
+                  color: 'rgba(245,245,247,0.7)',
                   fontFamily: "'Bricolage Grotesque', sans-serif",
                   fontWeight: 600, fontSize: '0.9rem',
                   textDecoration: 'none', letterSpacing: '-0.01em',
-                  transition: 'all 0.25s ease',
                 }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)'
-                  e.currentTarget.style.color = '#f5f5f7'
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.07)'
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'
-                  e.currentTarget.style.color = 'rgba(245,245,247,0.55)'
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.04)'
-                }}
-              >
-                Get in touch <ArrowUpRight size={16} />
-              </a>
+                >
+                  Get in touch <ArrowUpRight size={16} />
+                </a>
+              </Magnetic>
             </motion.div>
           )}
         </div>
       </motion.div>
 
-      {/* Stats row at bottom */}
+      {/* Stats strip */}
       {mounted && (
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.9, duration: 0.6 }}
           style={{
-            position: 'relative', zIndex: 4,
-            borderTop: '1px solid rgba(255,255,255,0.06)',
-            background: 'rgba(0,0,0,0.6)',
+            borderTop: '1px solid rgba(255,255,255,0.07)',
+            background: 'rgba(0,0,0,0.7)',
             backdropFilter: 'blur(20px)',
+            position: 'relative', zIndex: 2,
           }}
         >
           <div style={{
-            maxWidth: 1280, margin: '0 auto',
-            padding: '1.25rem 1.5rem',
-            display: 'flex', gap: 0,
-            overflowX: 'auto',
+            maxWidth: 1440, margin: '0 auto',
+            padding: '1.5rem clamp(1.5rem,5vw,4rem)',
+            display: 'flex', gap: 0, overflowX: 'auto',
           }}>
             {[
-              { n: '5+', label: 'Years shipping production code' },
-              { n: '10+', label: 'SaaS & AI products built' },
+              { n: '5+', label: 'Years in production' },
+              { n: '10+', label: 'Products shipped' },
               { n: '3.7k+', label: 'Releases on DigiQC' },
               { n: '3', label: 'Multi-tenant platforms' },
             ].map((s, i) => (
               <div key={s.n} style={{
-                padding: '0.5rem 2.5rem 0.5rem 0',
-                marginRight: '2.5rem',
+                paddingRight: 'clamp(1.5rem,4vw,3.5rem)',
+                marginRight: 'clamp(1.5rem,4vw,3.5rem)',
                 borderRight: i < 3 ? '1px solid rgba(255,255,255,0.07)' : 'none',
                 flexShrink: 0,
               }}>
                 <div style={{
                   fontFamily: "'Bricolage Grotesque', sans-serif",
-                  fontWeight: 800, fontSize: 'clamp(1.4rem, 3vw, 1.8rem)',
-                  color: '#ff4500', lineHeight: 1, letterSpacing: '-0.04em',
-                  marginBottom: '0.25rem',
+                  fontWeight: 800, fontSize: 'clamp(1.6rem,3vw,2rem)',
+                  color: '#ff4500', lineHeight: 1, letterSpacing: '-0.04em', marginBottom: '0.25rem',
                 }}>{s.n}</div>
                 <div style={{
-                  fontFamily: "'DM Mono', monospace", fontSize: '0.6rem',
-                  color: 'rgba(245,245,247,0.28)', letterSpacing: '0.06em',
-                  textTransform: 'uppercase', lineHeight: 1.4,
+                  fontFamily: "'DM Mono', monospace", fontSize: '0.58rem',
+                  color: 'rgba(245,245,247,0.25)', letterSpacing: '0.08em', textTransform: 'uppercase',
                 }}>{s.label}</div>
               </div>
             ))}

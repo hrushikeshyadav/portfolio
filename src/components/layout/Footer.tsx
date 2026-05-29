@@ -8,6 +8,7 @@ export default function Footer() {
       borderTop: '1px solid rgba(255,255,255,0.06)',
       padding: '1.5rem',
       background: '#0c0c0c',
+      position: 'relative', zIndex: 1,
     }}>
       <div style={{
         maxWidth: 1280, margin: '0 auto',
