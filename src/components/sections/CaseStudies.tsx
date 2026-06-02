@@ -165,9 +165,10 @@ export default function CaseStudies() {
 
   return (
     <section id="work" ref={ref} style={{
-      background: 'linear-gradient(to bottom, #000, rgba(0,0,0,0.92))',
+      background: '#0c0c0d',
       padding: 'clamp(6rem,12vw,10rem) clamp(1.5rem,5vw,4rem) clamp(3rem,6vw,5rem)',
       position: 'relative',
+      borderTop: '1px solid rgba(255,255,255,0.06)',
     }}>
       <div style={{ maxWidth: 1280, margin: '0 auto' }}>
         {/* Header */}

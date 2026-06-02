@@ -21,9 +21,9 @@ export default function Contact() {
 
   return (
     <section id="contact" ref={ref} style={{
-      padding: 'clamp(7rem, 14vw, 12rem) 1.5rem',
-      background: 'linear-gradient(to bottom, #000, rgba(0,0,0,0.65) 40%, transparent)',
-      borderTop: '1px solid rgba(255,255,255,0.05)',
+      padding: 'clamp(7rem, 14vw, 12rem) clamp(1.5rem,5vw,4rem)',
+      background: '#0a0a0b',
+      borderTop: '1px solid rgba(255,255,255,0.06)',
       position: 'relative', overflow: 'hidden',
     }}>
       {/* Bg watermark */}

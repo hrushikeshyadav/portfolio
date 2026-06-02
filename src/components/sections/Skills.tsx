@@ -6,25 +6,37 @@ const CATEGORIES = [
     label: 'Frontend',
     color: '#ff4500',
     blurb: 'Interfaces that feel instant.',
-    items: ['React 19', 'TypeScript', 'Next.js 15', 'Vite', 'Tailwind v4', 'Framer Motion', 'Three.js', 'shadcn/ui'],
+    items: ['React.js', 'Next.js (App Router)', 'TypeScript', 'JavaScript (ES6+)', 'Ant Design', 'HTML5', 'CSS3'],
   },
   {
-    label: 'API & Data',
+    label: 'APIs',
     color: '#00b4d8',
     blurb: 'The contract between client and server.',
-    items: ['GraphQL', 'Apollo Client', 'Apollo Server', 'TanStack Query', 'REST', 'GraphQL Codegen', 'Zod', 'Drizzle'],
+    items: ['GraphQL', 'Apollo Client', 'REST APIs'],
   },
   {
-    label: 'AI & Agents',
+    label: 'Backend',
+    color: '#f59e0b',
+    blurb: 'Logic that holds up under load.',
+    items: ['Node.js', 'Express.js'],
+  },
+  {
+    label: 'Integrations',
     color: '#a855f7',
-    blurb: 'Shipping LLMs into real products.',
-    items: ['Vercel AI SDK', 'Anthropic Claude', 'OpenAI', 'Gemini', 'Tool Calling', 'RAG', 'Streaming UI', 'MediaPipe'],
+    blurb: 'Wiring products into the world.',
+    items: ['Firebase', 'MSG91', 'OneSignal', 'HubSpot', 'Amplitude', 'GitHub / GitLab / Bitbucket APIs'],
   },
   {
-    label: 'Infrastructure',
-    color: '#22c55e',
-    blurb: 'What keeps it all running.',
-    items: ['Turborepo', 'Docker', 'Cloudflare Workers', 'Firebase', 'Node.js', 'GitHub Actions', 'Sentry', 'better-auth'],
+    label: 'Databases',
+    color: '#10b981',
+    blurb: 'Where the data actually lives.',
+    items: ['PostgreSQL', 'MongoDB', 'MySQL', 'Firestore'],
+  },
+  {
+    label: 'Tools & Platforms',
+    color: '#38bdf8',
+    blurb: 'Ship, host, repeat.',
+    items: ['Git', 'Vercel', 'Firebase Hosting'],
   },
 ]
 
@@ -131,8 +143,9 @@ export default function Skills() {
   return (
     <section id="stack" ref={ref} style={{
       padding: 'clamp(7rem, 14vw, 12rem) clamp(1.5rem,5vw,4rem)',
-      background: '#050505',
+      background: '#0c0c0d',
       position: 'relative', overflow: 'hidden',
+      borderTop: '1px solid rgba(255,255,255,0.06)',
     }}>
       <div style={{
         position: 'absolute', top: '3rem', right: '1.5rem',
@@ -184,8 +197,11 @@ export default function Skills() {
       </div>
 
       <style>{`
-        @media (min-width: 760px) {
+        @media (min-width: 700px) {
           .stack-grid { grid-template-columns: 1fr 1fr !important; }
+        }
+        @media (min-width: 1040px) {
+          .stack-grid { grid-template-columns: repeat(3, 1fr) !important; }
         }
       `}</style>
     </section>

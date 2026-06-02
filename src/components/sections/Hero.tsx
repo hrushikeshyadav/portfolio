@@ -43,14 +43,14 @@ export default function Hero() {
   return (
     <section ref={ref} style={{
       position: 'relative', minHeight: '100dvh',
-      background: 'transparent',
+      background: '#0a0a0b',
       display: 'flex', flexDirection: 'column',
       overflow: 'hidden',
     }}>
       {/* Very subtle radial glow */}
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
-        background: 'radial-gradient(ellipse 80% 60% at 50% 110%, rgba(255,69,0,0.07) 0%, transparent 65%)',
+        background: 'radial-gradient(ellipse 80% 60% at 50% 115%, rgba(255,69,0,0.06) 0%, transparent 60%)',
       }} />
 
       {/* Thin grid lines */}
@@ -205,7 +205,7 @@ export default function Hero() {
           transition={{ delay: 0.9, duration: 0.6 }}
           style={{
             borderTop: '1px solid rgba(255,255,255,0.07)',
-            background: 'rgba(0,0,0,0.7)',
+            background: 'rgba(10,10,11,0.85)',
             backdropFilter: 'blur(20px)',
             position: 'relative', zIndex: 2,
           }}
@@ -216,10 +216,10 @@ export default function Hero() {
             display: 'flex', gap: 0, overflowX: 'auto',
           }}>
             {[
-              { n: '5+', label: 'Years in production' },
+              { n: '4.5+', label: 'Years experience' },
+              { n: '5.7k+', label: 'Commits on DigiQC' },
               { n: '10+', label: 'Products shipped' },
-              { n: '3.7k+', label: 'Releases on DigiQC' },
-              { n: '3', label: 'Multi-tenant platforms' },
+              { n: '4', label: 'Languages spoken' },
             ].map((s, i) => (
               <div key={s.n} style={{
                 paddingRight: 'clamp(1.5rem,4vw,3.5rem)',

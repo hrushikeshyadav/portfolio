@@ -6,6 +6,7 @@ import { useNavigate, useRouterState } from '@tanstack/react-router'
 const links = [
   { href: '#work', label: 'Work' },
   { href: '#about', label: 'About' },
+  { href: '#experience', label: 'Career' },
   { href: '#stack', label: 'Stack' },
   { href: '#contact', label: 'Contact' },
 ]
