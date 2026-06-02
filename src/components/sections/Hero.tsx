@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowDownRight, ArrowUpRight } from 'lucide-react'
 import Magnetic from '../ui/Magnetic'
+import HeroScene from '../3d/HeroScene'
 
 const ROLES = ['Full Stack Engineer', 'GraphQL Architect', 'React Specialist', 'AI Builder']
 
@@ -59,6 +60,20 @@ export default function Hero() {
         backgroundImage: 'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
         backgroundSize: '80px 80px',
       }} />
+
+      {/* 3D centerpiece — upper-right, behind the name */}
+      <div className="hero-3d" style={{
+        position: 'absolute', top: '-6%', right: '-8%',
+        width: 'min(70vw, 760px)', height: 'min(85vh, 760px)',
+        zIndex: 1, pointerEvents: 'none',
+      }}>
+        <HeroScene />
+        {/* readability vignette toward the text side */}
+        <div style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none',
+          background: 'radial-gradient(ellipse 60% 60% at 70% 40%, transparent 30%, rgba(10,10,11,0.55) 75%)',
+        }} />
+      </div>
 
       <motion.div style={{ y, opacity, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative', zIndex: 2 }}>
         <div style={{ padding: 'clamp(7rem,12vw,9rem) clamp(1.5rem,5vw,4rem) 3rem', width: '100%', maxWidth: 1440, margin: '0 auto' }}>

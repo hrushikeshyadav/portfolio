@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import { motion, useInView, useScroll, useTransform } from 'framer-motion'
+import { ArrowUpRight } from 'lucide-react'
 import { caseStudies, type CaseStudy } from '../../data/caseStudies'
 
 function Chapter({ cs }: { cs: CaseStudy }) {
@@ -147,6 +148,24 @@ function Chapter({ cs }: { cs: CaseStudy }) {
               }}>{t}</span>
             ))}
           </div>
+
+          {/* Live product link */}
+          {cs.link && (
+            <a href={cs.link.href} target="_blank" rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 7, alignSelf: 'flex-start',
+                fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 600,
+                fontSize: '0.82rem', color: cs.accent, textDecoration: 'none',
+                padding: '0.5rem 1rem', border: `1px solid ${cs.accent}55`,
+                borderRadius: 100, transition: 'all 0.25s ease',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = `${cs.accent}1a`; e.currentTarget.style.borderColor = cs.accent }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = `${cs.accent}55` }}
+            >
+              Visit {cs.link.label}
+              <ArrowUpRight size={14} />
+            </a>
+          )}
         </div>
       </div>
 
@@ -188,7 +207,7 @@ export default function CaseStudies() {
             fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 800,
             fontSize: 'clamp(2.4rem,5.5vw,4.5rem)', letterSpacing: '-0.04em',
             color: '#f5f5f7', lineHeight: 1, margin: 0, maxWidth: 800,
-          }}>Three systems. Five years. Zero rewrites.</h2>
+          }}>Four products. 4.5+ years. Built to last.</h2>
         </motion.div>
 
         {caseStudies.map((cs) => <Chapter key={cs.id} cs={cs} />)}

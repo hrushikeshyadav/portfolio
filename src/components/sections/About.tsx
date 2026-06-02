@@ -15,7 +15,7 @@ const PHILOSOPHY = [
   {
     no: '03',
     title: 'Build platforms, not pages.',
-    body: 'Zinq became reusable enough that a second product mounts into it as a submodule. Good engineering compounds; I optimise for the second product, not just the first.',
+    body: 'I built the Eugenix admin to mount into the Zinq platform as a Git submodule — its own repo and CI, sharing one design system. Good engineering compounds; I optimise for the second product, not just the first.',
   },
 ]
 

@@ -4,10 +4,10 @@ import { ArrowUpRight } from 'lucide-react'
 import { allProjects } from '../../data/projects'
 
 const COLORS: Record<string, string> = {
-  digiqc: '#f59e0b', zinq: '#10b981', 'lw-agent-demos': '#8b5cf6',
-  appsonair: '#3b82f6', 'lw-hub': '#06b6d4', 'tmdb-next': '#f59e0b',
-  'vercel-ai-demo': '#ec4899', 'react-org-chart': '#84cc16',
-  'chem-erp': '#f97316', 'claude-monitor': '#a855f7',
+  'digiqc-team': '#f59e0b', 'digiqc-admin': '#f59e0b', 'lw-hub': '#06b6d4',
+  appsonair: '#3b82f6', zinq: '#10b981', rera: '#a855f7',
+  'appeal-collector': '#a855f7', urltags: '#f97316', tmdb: '#38bdf8',
+  boilerplates: '#f59e0b',
 }
 
 function Row({ project, i, inView }: { project: (typeof allProjects)[0]; i: number; inView: boolean }) {
@@ -68,6 +68,13 @@ function Row({ project, i, inView }: { project: (typeof allProjects)[0]; i: numb
 
         {/* year + arrow */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          {project.link && (
+            <span style={{
+              fontFamily: "'DM Mono', monospace", fontSize: '0.56rem',
+              color: hover ? accent : 'rgba(245,245,247,0.25)',
+              letterSpacing: '0.1em', textTransform: 'uppercase', transition: 'color 0.3s',
+            }} className="live-badge">Live</span>
+          )}
           <span style={{
             fontFamily: "'DM Mono', monospace", fontSize: '0.68rem',
             color: 'rgba(245,245,247,0.35)', letterSpacing: '0.04em',
@@ -82,6 +89,14 @@ function Row({ project, i, inView }: { project: (typeof allProjects)[0]; i: numb
           />
         </div>
       </div>
+
+      {/* clickable overlay for live products */}
+      {project.link && (
+        <a href={project.link} target="_blank" rel="noopener noreferrer"
+          aria-label={`Visit ${project.name}`}
+          style={{ position: 'absolute', inset: 0, zIndex: 2 }}
+        />
+      )}
     </motion.div>
   )
 }
