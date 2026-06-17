@@ -32,16 +32,14 @@ export default function ProjectCard({ project, index, inView }: Props) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onMouseMove={handleMouseMove}
+      className="glass glass-rim glass-interactive glass-sheen"
       style={{
-        background: '#0f0d14',
-        border: `1px solid ${hovered ? 'rgba(245,158,11,0.25)' : 'rgba(255,255,255,0.06)'}`,
+        ['--glass-radius' as string]: '16px',
+        ['--glass-blur' as string]: '14px',
+        ['--glass-fill' as string]: '0.05',
+        border: `1px solid ${hovered ? 'rgba(245,158,11,0.35)' : 'rgba(255,255,255,0.10)'}`,
         padding: '1.75rem',
         position: 'relative',
-        overflow: 'hidden',
-        cursor: 'pointer',
-        transition: 'border-color 0.3s ease, transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s ease',
-        transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
-        boxShadow: hovered ? '0 16px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(245,158,11,0.1)' : 'none',
       }}
     >
       {/* Mouse-follow radial highlight */}

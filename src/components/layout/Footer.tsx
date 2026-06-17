@@ -52,22 +52,17 @@ export default function Footer() {
           ))}
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="glass glass-interactive glass-rim"
             style={{
-              background: 'rgba(255,255,255,0.04)',
-              border: '1px solid rgba(255,255,255,0.08)',
-              color: 'rgba(245,240,235,0.25)',
-              padding: '0.35rem', display: 'flex',
+              ['--glass-radius' as string]: '10px',
+              ['--glass-blur' as string]: '8px',
+              color: 'rgba(245,240,235,0.35)',
+              padding: '0.45rem', display: 'flex',
               alignItems: 'center', justifyContent: 'center',
-              transition: 'all 0.2s', marginLeft: 4,
+              marginLeft: 4,
             }}
-            onMouseEnter={e => {
-              e.currentTarget.style.borderColor = 'rgba(255,69,0,0.4)'
-              e.currentTarget.style.color = '#ff4500'
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'
-              e.currentTarget.style.color = 'rgba(245,240,235,0.25)'
-            }}
+            onMouseEnter={e => { e.currentTarget.style.color = '#ff8a4c' }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(245,240,235,0.35)' }}
             aria-label="Back to top"
           >
             <ArrowUp size={13} />

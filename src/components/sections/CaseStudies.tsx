@@ -113,13 +113,14 @@ function Chapter({ cs }: { cs: CaseStudy }) {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={inView ? { opacity: 1, scale: 1 } : {}}
                 transition={{ delay: 0.25 + i * 0.06, duration: 0.4 }}
+                className="glass glass-rim"
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 7,
                   fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 500,
-                  fontSize: '0.85rem', color: 'rgba(245,245,247,0.7)',
-                  background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(255,255,255,0.09)',
-                  padding: '0.45rem 0.85rem', borderRadius: 100,
+                  fontSize: '0.85rem', color: 'rgba(245,245,247,0.72)',
+                  ['--glass-radius' as string]: '100px',
+                  ['--glass-blur' as string]: '8px',
+                  padding: '0.45rem 0.85rem',
                 }}
               >
                 <span style={{ width: 5, height: 5, borderRadius: '50%', background: cs.accent, flexShrink: 0 }} />
@@ -152,15 +153,17 @@ function Chapter({ cs }: { cs: CaseStudy }) {
           {/* Live product link */}
           {cs.link && (
             <a href={cs.link.href} target="_blank" rel="noopener noreferrer"
+              className="glass glass-interactive glass-rim glass-sheen"
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 7, alignSelf: 'flex-start',
                 fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 600,
                 fontSize: '0.82rem', color: cs.accent, textDecoration: 'none',
                 padding: '0.5rem 1rem', border: `1px solid ${cs.accent}55`,
-                borderRadius: 100, transition: 'all 0.25s ease',
+                ['--glass-radius' as string]: '100px',
+                ['--glass-blur' as string]: '10px',
               }}
-              onMouseEnter={e => { e.currentTarget.style.background = `${cs.accent}1a`; e.currentTarget.style.borderColor = cs.accent }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = `${cs.accent}55` }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = cs.accent }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = `${cs.accent}55` }}
             >
               Visit {cs.link.label}
               <ArrowUpRight size={14} />

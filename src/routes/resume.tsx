@@ -41,19 +41,23 @@ function DownloadButton({ dark = false }: { dark?: boolean }) {
     }>
       <PDFDownloadLink document={<ResumePDF />} fileName="Hrushikesh_Yadav_Resume.pdf" style={{ textDecoration: 'none' }}>
         {({ loading }) => (
-          <button style={{
+          <button
+            className={dark ? 'glass glass-warm glass-interactive glass-rim glass-sheen' : ''}
+            style={{
             display: 'flex', alignItems: 'center', gap: 7,
             padding: '0.65rem 1.5rem',
-            background: loading ? 'rgba(255,69,0,0.08)' : (dark ? 'rgba(255,69,0,0.1)' : '#ff4500'),
-            border: dark ? '1px solid rgba(255,69,0,0.3)' : 'none',
-            color: loading ? '#ff4500' : (dark ? '#ff4500' : '#000'),
+            ['--glass-radius' as string]: '10px',
+            ['--glass-blur' as string]: '10px',
+            background: dark ? undefined : (loading ? 'rgba(255,69,0,0.08)' : '#ff4500'),
+            border: dark ? undefined : 'none',
+            color: loading ? '#ff8a4c' : (dark ? '#ff8a4c' : '#000'),
             fontFamily: "'Bricolage Grotesque', sans-serif",
             fontWeight: 700, fontSize: '0.82rem', letterSpacing: '-0.01em',
             cursor: loading ? 'default' : 'pointer',
-            transition: 'all 0.25s ease',
+            transition: dark ? undefined : 'all 0.25s ease',
           }}
-            onMouseEnter={e => { if (!loading) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(255,69,0,0.35)' } }}
-            onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '' }}
+            onMouseEnter={e => { if (!loading && !dark) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(255,69,0,0.35)' } }}
+            onMouseLeave={e => { if (!dark) { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '' } }}
           >
             <Download size={14} />
             {loading ? 'Preparing…' : 'Download PDF'}

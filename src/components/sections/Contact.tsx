@@ -124,34 +124,32 @@ export default function Contact() {
           </a>
 
           <button onClick={copy}
+            className="glass glass-interactive glass-rim"
             style={{
               display: 'flex', alignItems: 'center', gap: 8,
               padding: '0.95rem 1.75rem',
-              background: 'rgba(255,255,255,0.04)',
-              border: `1px solid ${copied ? 'rgba(48,209,88,0.35)' : 'rgba(255,255,255,0.1)'}`,
-              color: copied ? '#30d158' : 'rgba(245,245,247,0.45)',
+              ['--glass-radius' as string]: '12px',
+              ['--glass-blur' as string]: '12px',
+              border: copied ? '1px solid rgba(48,209,88,0.45)' : undefined,
+              color: copied ? '#30d158' : 'rgba(245,245,247,0.7)',
               fontFamily: "'DM Mono', monospace", fontSize: '0.78rem',
-              letterSpacing: '0.03em', transition: 'all 0.2s ease',
-              cursor: 'pointer',
+              letterSpacing: '0.03em',
             }}
-            onMouseEnter={e => { if (!copied) { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.22)'; e.currentTarget.style.color = '#f5f5f7' } }}
-            onMouseLeave={e => { if (!copied) { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'rgba(245,245,247,0.45)' } }}
           >
             {copied ? '✓ Copied!' : 'yadavhrushikesh21@gmail.com'}
           </button>
 
           <a href="tel:+919054573621"
+            className="glass glass-interactive glass-rim"
             style={{
               display: 'flex', alignItems: 'center', gap: 7,
               padding: '0.95rem 1.5rem',
-              background: 'rgba(255,255,255,0.04)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              color: 'rgba(245,245,247,0.45)',
+              ['--glass-radius' as string]: '12px',
+              ['--glass-blur' as string]: '12px',
+              color: 'rgba(245,245,247,0.7)',
               fontFamily: "'DM Mono', monospace", fontSize: '0.78rem',
-              letterSpacing: '0.03em', transition: 'all 0.2s ease', textDecoration: 'none',
+              letterSpacing: '0.03em', textDecoration: 'none',
             }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.22)'; e.currentTarget.style.color = '#f5f5f7' }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'rgba(245,245,247,0.45)' }}
           >
             <Phone size={13} /> +91 9054573621
           </a>
@@ -159,25 +157,17 @@ export default function Contact() {
           <div style={{ display: 'flex', gap: '0.5rem' }}>
             {socials.map(({ label, href, Icon }) => (
               <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
+                className="glass glass-interactive glass-rim"
                 style={{
                   width: 48, height: 48,
-                  border: '1px solid rgba(255,255,255,0.09)',
+                  ['--glass-radius' as string]: '12px',
+                  ['--glass-blur' as string]: '12px',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: 'rgba(245,245,247,0.3)',
+                  color: 'rgba(245,245,247,0.5)',
                   textDecoration: 'none',
-                  transition: 'all 0.2s ease',
-                  background: 'rgba(255,255,255,0.03)',
                 }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = 'rgba(255,69,0,0.4)'
-                  e.currentTarget.style.color = '#ff4500'
-                  e.currentTarget.style.background = 'rgba(255,69,0,0.06)'
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.09)'
-                  e.currentTarget.style.color = 'rgba(245,245,247,0.3)'
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.03)'
-                }}
+                onMouseEnter={e => { e.currentTarget.style.color = '#ff8a4c' }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'rgba(245,245,247,0.5)' }}
               >
                 <Icon size={16} />
               </a>

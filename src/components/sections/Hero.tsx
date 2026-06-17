@@ -81,11 +81,12 @@ export default function Hero() {
           {/* Available badge */}
           {mounted && (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} style={{ marginBottom: '3rem' }}>
-              <span style={{
+              <span className="glass glass-rim" style={{
                 display: 'inline-flex', alignItems: 'center', gap: 8,
                 padding: '0.4rem 1rem',
-                border: '1px solid rgba(48,209,88,0.3)',
-                background: 'rgba(48,209,88,0.06)',
+                ['--glass-radius' as string]: '999px',
+                ['--glass-blur' as string]: '8px',
+                border: '1px solid rgba(48,209,88,0.28)',
                 fontFamily: "'DM Mono', monospace",
                 fontSize: '0.62rem', color: '#30d158', letterSpacing: '0.14em', textTransform: 'uppercase',
               }}>
@@ -193,12 +194,14 @@ export default function Hero() {
                 </button>
               </Magnetic>
               <Magnetic strength={0.4}>
-                <a href="mailto:yadavhrushikesh21@gmail.com" style={{
+                <a href="mailto:yadavhrushikesh21@gmail.com"
+                  className="glass glass-interactive glass-rim glass-sheen"
+                  style={{
                   display: 'flex', alignItems: 'center', gap: 8,
                   padding: '0.9rem 2.25rem',
-                  background: 'transparent',
-                  border: '1px solid rgba(245,245,247,0.15)',
-                  color: 'rgba(245,245,247,0.7)',
+                  ['--glass-radius' as string]: '999px',
+                  ['--glass-blur' as string]: '12px',
+                  color: 'rgba(245,245,247,0.82)',
                   fontFamily: "'Bricolage Grotesque', sans-serif",
                   fontWeight: 600, fontSize: '0.9rem',
                   textDecoration: 'none', letterSpacing: '-0.01em',

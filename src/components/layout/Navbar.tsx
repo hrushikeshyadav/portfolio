@@ -52,13 +52,17 @@ export default function Navbar() {
         initial={{ y: -72 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className={scrolled ? 'glass glass-refract glass-rim' : ''}
         style={{
           position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
           height: 64,
-          background: scrolled ? 'rgba(12,12,12,0.9)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(20px) saturate(180%)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(255,255,255,0.06)' : '1px solid transparent',
-          transition: 'background 0.4s ease, border-color 0.4s ease',
+          ...(scrolled
+            ? {
+                ['--glass-radius' as string]: '0px',
+                ['--glass-fill' as string]: '0.05',
+              }
+            : { background: 'transparent', borderBottom: '1px solid transparent' }),
+          transition: 'background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease',
         }}
       >
         <div style={{
@@ -129,24 +133,16 @@ export default function Navbar() {
             </button>
 
             <a href="mailto:yadavhrushikesh21@gmail.com"
+              className="glass glass-warm glass-interactive glass-rim"
               style={{
                 display: 'flex', alignItems: 'center', gap: 6,
                 padding: '0.45rem 1.1rem',
-                background: 'rgba(255,69,0,0.1)',
-                border: '1px solid rgba(255,69,0,0.3)',
+                ['--glass-radius' as string]: '999px',
+                ['--glass-blur' as string]: '10px',
                 fontFamily: "'Bricolage Grotesque', sans-serif",
                 fontWeight: 600, fontSize: '0.8rem',
-                color: '#ff4500', textDecoration: 'none',
+                color: '#ff8a4c', textDecoration: 'none',
                 letterSpacing: '-0.01em',
-                transition: 'all 0.2s ease',
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.background = 'rgba(255,69,0,0.18)'
-                e.currentTarget.style.borderColor = 'rgba(255,69,0,0.6)'
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.background = 'rgba(255,69,0,0.1)'
-                e.currentTarget.style.borderColor = 'rgba(255,69,0,0.3)'
               }}
             >
               <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#00e96a', display: 'inline-block', boxShadow: '0 0 6px #00e96a' }} />
@@ -155,11 +151,12 @@ export default function Navbar() {
           </nav>
 
           {/* Mobile toggle */}
-          <button className="flex md:hidden"
+          <button className="flex md:hidden glass glass-interactive glass-rim"
             onClick={() => setOpen(v => !v)}
             style={{
-              background: 'none', border: '1px solid rgba(255,255,255,0.1)',
-              color: '#f5f0eb', padding: '0.35rem', display: 'flex',
+              ['--glass-radius' as string]: '12px',
+              ['--glass-blur' as string]: '10px',
+              color: '#f5f0eb', padding: '0.45rem', display: 'flex',
               alignItems: 'center', justifyContent: 'center',
             }}
           >
@@ -175,11 +172,11 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.22 }}
+            className="glass glass-refract glass-rim"
             style={{
               position: 'fixed', top: 64, left: 0, right: 0, zIndex: 999,
-              background: 'rgba(12,12,12,0.98)',
-              backdropFilter: 'blur(20px)',
-              borderBottom: '1px solid rgba(255,255,255,0.07)',
+              ['--glass-radius' as string]: '0px',
+              ['--glass-fill' as string]: '0.07',
               padding: '1.25rem 1.5rem 1.75rem',
             }}
           >
