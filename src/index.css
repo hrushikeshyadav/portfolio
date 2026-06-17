@@ -2,21 +2,99 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --bg: #000000;
-  --bg-2: #050505;
-  --surface: #0d0d0d;
-  --surface-2: #1c1c1e;
-  --border: rgba(255, 255, 255, 0.06);
-  --border-2: rgba(255, 255, 255, 0.1);
-  --orange: #ff4500;
-  --orange-dim: rgba(255, 69, 0, 0.1);
-  --green: #30d158;
-  --text: #f5f5f7;
-  --text-2: rgba(245, 245, 247, 0.55);
-  --text-3: rgba(245, 245, 247, 0.3);
-  --text-4: rgba(245, 245, 247, 0.15);
+/* ============================================================
+   Theme tokens. Colors are exposed both as solids and as raw
+   "r,g,b" triplets so inline styles can keep arbitrary alphas
+   via rgba(var(--x-rgb), A) and still flip with the theme.
+   Reference palette: deep royal/indigo blue + a pink/peach
+   aurora accent, Apple liquid glass.
+   ============================================================ */
+:root,
+:root[data-theme='dark'] {
+  --bg: #060814;
+  --bg-2: #0a0f24;
+  --bg-rgb: 6, 8, 20;
+  --surface: #0d1430;
+  --surface-2: #121a3a;
+
+  --text: #eceef7;
+  --text-rgb: 236, 238, 247;
+  --text-2: rgba(236, 238, 247, 0.55);
+  --text-3: rgba(236, 238, 247, 0.3);
+  --text-4: rgba(236, 238, 247, 0.15);
+
+  /* blue primary accent + pink/peach aurora secondary */
+  --accent: #5a8cff;
+  --accent-rgb: 90, 140, 255;
+  --accent-2: #ff8fb4;
+  --accent2-rgb: 255, 143, 180;
+
+  --border-rgb: 255, 255, 255;
+  --border: rgba(255, 255, 255, 0.07);
+  --border-2: rgba(255, 255, 255, 0.12);
+
+  --green: #34d399;
+  --green-rgb: 52, 211, 153;
   --muted: #3a3a3c;
+
+  /* glass material — blue-tinted frost on dark */
+  --glass-tint: 165, 195, 255;
+  --glass-fill: 0.07;
+  --glass-spec: 255, 255, 255;      /* top specular highlight color */
+  --glass-spec-op: 0.22;
+  --glass-shadow: 0, 0, 0;
+  --glass-shadow-op: 0.42;
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-border-hover: rgba(255, 255, 255, 0.2);
+
+  /* aurora wash behind the page */
+  --aurora-1: rgba(90, 140, 255, 0.18);
+  --aurora-2: rgba(255, 143, 180, 0.12);
+  --aurora-3: rgba(150, 120, 255, 0.10);
+  --grain-op: 0.025;
+}
+
+:root[data-theme='light'] {
+  --bg: #eef2fb;
+  --bg-2: #e5ecf9;
+  --bg-rgb: 238, 242, 251;
+  --surface: #ffffff;
+  --surface-2: #f3f6fd;
+
+  --text: #111526;
+  --text-rgb: 17, 21, 38;
+  --text-2: rgba(17, 21, 38, 0.6);
+  --text-3: rgba(17, 21, 38, 0.42);
+  --text-4: rgba(17, 21, 38, 0.22);
+
+  --accent: #2a5ce6;
+  --accent-rgb: 42, 92, 230;
+  --accent-2: #e7588e;
+  --accent2-rgb: 231, 88, 142;
+
+  --border-rgb: 17, 21, 45;
+  --border: rgba(17, 21, 45, 0.1);
+  --border-2: rgba(17, 21, 45, 0.16);
+
+  --green: #0f9d63;
+  --green-rgb: 15, 157, 99;
+  --muted: #9aa3bd;
+
+  /* glass material — a crisp frosted-white panel defined by border + shadow,
+     since a light fill barely separates from a light bg. */
+  --glass-tint: 255, 255, 255;
+  --glass-fill: 0.18;
+  --glass-spec: 255, 255, 255;
+  --glass-spec-op: 0.75;
+  --glass-shadow: 30, 50, 120;
+  --glass-shadow-op: 0.14;
+  --glass-border: rgba(17, 21, 45, 0.14);
+  --glass-border-hover: rgba(42, 92, 230, 0.4);
+
+  --aurora-1: rgba(90, 140, 255, 0.16);
+  --aurora-2: rgba(255, 120, 165, 0.13);
+  --aurora-3: rgba(150, 120, 255, 0.1);
+  --grain-op: 0.012;
 }
 
 *, *::before, *::after {
@@ -38,6 +116,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   cursor: none;
+  transition: background 0.5s ease, color 0.5s ease;
 }
 
 * { cursor: none !important; }
@@ -47,14 +126,29 @@ body {
   width: 100%;
 }
 
+/* Aurora wash — a soft pink/peach + blue glow bleeding from the corners,
+   echoing the reference. Sits behind everything, above the page bg. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 55% at 8% 12%, var(--aurora-2) 0%, transparent 60%),
+    radial-gradient(70% 60% at 92% 4%, var(--aurora-1) 0%, transparent 62%),
+    radial-gradient(80% 70% at 50% 110%, var(--aurora-3) 0%, transparent 60%);
+  transition: background 0.5s ease;
+}
+
 ::selection {
-  background: rgba(255, 69, 0, 0.22);
-  color: #ff6b35;
+  background: rgba(var(--accent-rgb), 0.28);
+  color: var(--text);
 }
 
 ::-webkit-scrollbar { width: 1px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: #2a2a2a; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(var(--accent-rgb), 0.4); }
 
 /* Subtle film grain */
 body::after {
@@ -63,7 +157,7 @@ body::after {
   inset: 0;
   z-index: 9999;
   pointer-events: none;
-  opacity: 0.025;
+  opacity: var(--grain-op);
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 200px 200px;
 }
@@ -98,7 +192,7 @@ body::after {
   position: absolute;
   left: 0; bottom: -2px;
   width: 0; height: 1px;
-  background: var(--orange);
+  background: var(--accent);
   transition: width 0.3s cubic-bezier(0.77, 0, 0.175, 1);
 }
 .link-ul:hover::after { width: 100%; }
@@ -120,8 +214,6 @@ body::after {
    ============================================================ */
 
 :root {
-  --glass-tint: 255, 255, 255;          /* light glass */
-  --glass-fill: 0.06;                    /* base translucency */
   --glass-blur: 16px;
   --glass-radius: 18px;
 }
@@ -133,28 +225,28 @@ body::after {
     /* soft ambient gleam catching light from the top-left */
     radial-gradient(
       140% 90% at 18% -12%,
-      rgba(255, 255, 255, 0.13) 0%,
+      rgba(var(--glass-spec), calc(var(--glass-spec-op) * 0.6)) 0%,
       transparent 46%
     ),
     /* the translucent body fill */
     linear-gradient(
       160deg,
-      rgba(var(--glass-tint), calc(var(--glass-fill) + 0.04)) 0%,
+      rgba(var(--glass-tint), calc(var(--glass-fill) + 0.05)) 0%,
       rgba(var(--glass-tint), var(--glass-fill)) 46%,
       rgba(var(--glass-tint), calc(var(--glass-fill) * 0.6)) 100%
     );
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(170%);
   backdrop-filter: blur(var(--glass-blur)) saturate(170%);
-  border: 1px solid rgba(var(--glass-tint), 0.09);
+  border: 1px solid var(--glass-border);
   box-shadow:
     /* a gentle specular catch on the top edge — soft, not a seam */
-    inset 0 1px 0.5px 0 rgba(255, 255, 255, 0.22),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+    inset 0 1px 0.5px 0 rgba(var(--glass-spec), var(--glass-spec-op)),
+    inset 0 0 0 1px rgba(var(--glass-spec), 0.04),
     /* diffuse inner shade grounding the bottom for depth */
-    inset 0 -10px 26px -14px rgba(0, 0, 0, 0.42),
+    inset 0 -10px 26px -14px rgba(var(--glass-shadow), var(--glass-shadow-op)),
     /* the floating shadow — wide, soft, lifted */
-    0 14px 44px -10px rgba(0, 0, 0, 0.42),
-    0 3px 10px -2px rgba(0, 0, 0, 0.22);
+    0 14px 44px -10px rgba(var(--glass-shadow), var(--glass-shadow-op)),
+    0 3px 10px -2px rgba(var(--glass-shadow), calc(var(--glass-shadow-op) * 0.55));
   isolation: isolate;
   overflow: hidden;
 }
@@ -178,7 +270,7 @@ body::after {
   background: linear-gradient(
     115deg,
     transparent 42%,
-    rgba(255, 255, 255, 0.10) 50%,
+    rgba(var(--glass-spec), calc(var(--glass-spec-op) * 0.5)) 50%,
     transparent 58%
   );
   transform: translateX(-130%);
@@ -204,8 +296,8 @@ body::after {
   padding: 1px;
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.30) 0%,
-    rgba(255, 255, 255, 0.04) 22%,
+    rgba(var(--glass-spec), calc(var(--glass-spec-op) * 1.3)) 0%,
+    rgba(var(--glass-spec), calc(var(--glass-spec-op) * 0.18)) 22%,
     transparent 48%
   );
   -webkit-mask:
@@ -227,60 +319,130 @@ body::after {
 }
 .glass-interactive:hover {
   transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: var(--glass-border-hover);
   background:
     radial-gradient(
       140% 90% at 18% -12%,
-      rgba(255, 255, 255, 0.17) 0%,
+      rgba(var(--glass-spec), calc(var(--glass-spec-op) * 0.8)) 0%,
       transparent 48%
     ),
     linear-gradient(
       160deg,
-      rgba(var(--glass-tint), calc(var(--glass-fill) + 0.07)) 0%,
-      rgba(var(--glass-tint), calc(var(--glass-fill) + 0.02)) 46%,
-      rgba(var(--glass-tint), var(--glass-fill)) 100%
+      rgba(var(--glass-tint), calc(var(--glass-fill) + 0.08)) 0%,
+      rgba(var(--glass-tint), calc(var(--glass-fill) + 0.03)) 46%,
+      rgba(var(--glass-tint), calc(var(--glass-fill) + 0.01)) 100%
     );
   box-shadow:
-    inset 0 1px 0.5px 0 rgba(255, 255, 255, 0.30),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.04),
-    inset 0 -10px 26px -14px rgba(0, 0, 0, 0.42),
-    0 22px 56px -12px rgba(0, 0, 0, 0.46),
-    0 5px 14px -2px rgba(0, 0, 0, 0.24);
+    inset 0 1px 0.5px 0 rgba(var(--glass-spec), calc(var(--glass-spec-op) + 0.08)),
+    inset 0 0 0 1px rgba(var(--glass-spec), 0.05),
+    inset 0 -10px 26px -14px rgba(var(--glass-shadow), var(--glass-shadow-op)),
+    0 22px 56px -12px rgba(var(--glass-shadow), calc(var(--glass-shadow-op) + 0.04)),
+    0 5px 14px -2px rgba(var(--glass-shadow), calc(var(--glass-shadow-op) * 0.6));
 }
 
-/* Warm (orange-accent) glass variant for CTAs */
+/* Accent glass variant for CTAs — warm pink/peach aurora tint */
 .glass-warm {
   background:
     radial-gradient(
       140% 90% at 18% -12%,
-      rgba(255, 190, 150, 0.22) 0%,
+      rgba(var(--accent2-rgb), 0.30) 0%,
       transparent 50%
     ),
     linear-gradient(
       160deg,
-      rgba(255, 110, 50, 0.18) 0%,
-      rgba(255, 69, 0, 0.11) 50%,
-      rgba(255, 69, 0, 0.06) 100%
+      rgba(var(--accent2-rgb), 0.24) 0%,
+      rgba(var(--accent2-rgb), 0.14) 50%,
+      rgba(var(--accent2-rgb), 0.08) 100%
     );
-  border-color: rgba(255, 120, 60, 0.28);
+  border-color: rgba(var(--accent2-rgb), 0.34);
   box-shadow:
-    inset 0 1px 0.5px 0 rgba(255, 200, 170, 0.38),
-    inset 0 0 0 1px rgba(255, 140, 80, 0.05),
-    inset 0 -10px 24px -14px rgba(120, 30, 0, 0.40),
-    0 12px 40px -10px rgba(0, 0, 0, 0.38),
-    0 4px 18px -4px rgba(255, 69, 0, 0.18);
+    inset 0 1px 0.5px 0 rgba(var(--glass-spec), calc(var(--glass-spec-op) + 0.12)),
+    inset 0 0 0 1px rgba(var(--accent2-rgb), 0.06),
+    inset 0 -10px 24px -14px rgba(var(--glass-shadow), var(--glass-shadow-op)),
+    0 12px 40px -10px rgba(var(--glass-shadow), var(--glass-shadow-op)),
+    0 4px 18px -4px rgba(var(--accent2-rgb), 0.22);
 }
 .glass-warm.glass-interactive:hover {
-  border-color: rgba(255, 140, 80, 0.50);
+  border-color: rgba(var(--accent2-rgb), 0.6);
   box-shadow:
-    inset 0 1px 0.5px 0 rgba(255, 210, 180, 0.48),
-    inset 0 0 0 1px rgba(255, 150, 90, 0.07),
-    inset 0 -10px 24px -14px rgba(120, 30, 0, 0.40),
-    0 22px 52px -12px rgba(0, 0, 0, 0.42),
-    0 6px 26px -4px rgba(255, 69, 0, 0.32);
+    inset 0 1px 0.5px 0 rgba(var(--glass-spec), calc(var(--glass-spec-op) + 0.2)),
+    inset 0 0 0 1px rgba(var(--accent2-rgb), 0.09),
+    inset 0 -10px 24px -14px rgba(var(--glass-shadow), var(--glass-shadow-op)),
+    0 22px 52px -12px rgba(var(--glass-shadow), calc(var(--glass-shadow-op) + 0.04)),
+    0 6px 26px -4px rgba(var(--accent2-rgb), 0.38);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .glass-sheen::before { animation: none; opacity: 0; }
   .glass-interactive { transition: none; }
 }
+
+/* Small monospace tech chip (used on project cards) */
+.tech-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  color: rgba(var(--text-rgb), 0.55);
+  background: rgba(var(--accent-rgb), 0.08);
+  border: 1px solid rgba(var(--accent-rgb), 0.16);
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+/* ---- Responsive helpers ---- */
+/* Keep the last content clear of the floating tab bar */
+footer { margin-bottom: calc(env(safe-area-inset-bottom, 0px) + 6rem); }
+
+/* Hide the header "Available" pill on small screens */
+@media (max-width: 600px) {
+  .hide-xs { display: none !important; }
+}
+
+/* Hero 3D centrepiece — a centred glowing backdrop on small screens (text
+   sits above it; chips render behind via zIndexRange), and the upper-right
+   composition on wide screens. */
+.hero-3d {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  top: 4%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(130vw, 600px);
+  height: min(64vh, 600px);
+  opacity: 0.62;
+}
+@media (min-width: 1024px) {
+  .hero-3d {
+    top: -6%;
+    left: auto;
+    right: -8%;
+    transform: none;
+    width: min(70vw, 760px);
+    height: min(85vh, 760px);
+    opacity: 1;
+  }
+}
+
+/* Theme-toggle knob */
+.theme-toggle-track {
+  position: relative;
+  width: 52px; height: 26px;
+  border-radius: 999px;
+  display: inline-flex; align-items: center;
+  padding: 0 3px;
+  flex-shrink: 0;
+}
+.theme-toggle-knob {
+  position: absolute;
+  top: 3px;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--bg);
+  transition: left 0.35s cubic-bezier(0.22, 1, 0.36, 1), background 0.35s ease;
+}
+:root[data-theme='dark'] .theme-toggle-knob { left: 3px; }
+:root[data-theme='light'] .theme-toggle-knob { left: 29px; }

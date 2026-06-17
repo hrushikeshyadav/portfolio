@@ -37,7 +37,7 @@ export default function ProjectCard({ project, index, inView }: Props) {
         ['--glass-radius' as string]: '16px',
         ['--glass-blur' as string]: '14px',
         ['--glass-fill' as string]: '0.05',
-        border: `1px solid ${hovered ? 'rgba(245,158,11,0.35)' : 'rgba(255,255,255,0.10)'}`,
+        border: `1px solid ${hovered ? 'rgba(var(--accent-rgb),0.35)' : 'rgba(var(--border-rgb),0.10)'}`,
         padding: '1.75rem',
         position: 'relative',
       }}
@@ -48,7 +48,7 @@ export default function ProjectCard({ project, index, inView }: Props) {
         inset: 0,
         opacity: hovered ? 1 : 0,
         transition: 'opacity 0.3s ease',
-        background: 'radial-gradient(200px circle at var(--mx, 50%) var(--my, 50%), rgba(245,158,11,0.07), transparent)',
+        background: 'radial-gradient(200px circle at var(--mx, 50%) var(--my, 50%), rgba(var(--accent-rgb),0.07), transparent)',
         pointerEvents: 'none',
       }} />
 
@@ -59,7 +59,7 @@ export default function ProjectCard({ project, index, inView }: Props) {
         left: 0,
         right: hovered ? '0%' : '100%',
         height: '1px',
-        background: '#f59e0b',
+        background: 'var(--accent)',
         transition: 'right 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
       }} />
 
@@ -68,7 +68,7 @@ export default function ProjectCard({ project, index, inView }: Props) {
         fontFamily: "'Fraunces', serif",
         fontWeight: 900,
         fontSize: '4rem',
-        color: hovered ? 'rgba(245,158,11,0.08)' : 'rgba(255,255,255,0.04)',
+        color: hovered ? 'rgba(var(--accent-rgb),0.08)' : 'rgba(var(--border-rgb),0.04)',
         lineHeight: 1,
         position: 'absolute',
         top: '1rem',
@@ -86,9 +86,9 @@ export default function ProjectCard({ project, index, inView }: Props) {
         display: 'inline-block',
         fontFamily: "'JetBrains Mono', monospace",
         fontSize: '0.65rem',
-        color: 'rgba(245,158,11,0.7)',
-        background: 'rgba(245,158,11,0.08)',
-        border: '1px solid rgba(245,158,11,0.15)',
+        color: 'rgba(var(--accent-rgb),0.7)',
+        background: 'rgba(var(--accent-rgb),0.08)',
+        border: '1px solid rgba(var(--accent-rgb),0.15)',
         padding: '0.2rem 0.6rem',
         marginBottom: '1.25rem',
         letterSpacing: '0.08em',
@@ -102,7 +102,7 @@ export default function ProjectCard({ project, index, inView }: Props) {
         fontFamily: "'Syne', sans-serif",
         fontWeight: 800,
         fontSize: 'clamp(1.1rem, 2vw, 1.35rem)',
-        color: '#f0ebe4',
+        color: 'var(--text)',
         marginBottom: '0.4rem',
         letterSpacing: '-0.01em',
         lineHeight: 1.2,
@@ -114,7 +114,7 @@ export default function ProjectCard({ project, index, inView }: Props) {
       <p style={{
         fontFamily: "'Plus Jakarta Sans', sans-serif",
         fontSize: '0.85rem',
-        color: 'rgba(240,235,228,0.45)',
+        color: 'rgba(var(--text-rgb),0.45)',
         marginBottom: '1rem',
         lineHeight: 1.5,
         fontWeight: 400,
@@ -133,7 +133,7 @@ export default function ProjectCard({ project, index, inView }: Props) {
         <p style={{
           fontFamily: "'Plus Jakarta Sans', sans-serif",
           fontSize: '0.8rem',
-          color: 'rgba(240,235,228,0.5)',
+          color: 'rgba(var(--text-rgb),0.5)',
           lineHeight: 1.7,
         }}>
           {project.description}
@@ -157,14 +157,14 @@ export default function ProjectCard({ project, index, inView }: Props) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        borderTop: '1px solid rgba(255,255,255,0.05)',
+        borderTop: '1px solid rgba(var(--border-rgb),0.05)',
         paddingTop: '1rem',
         marginTop: 'auto',
       }}>
         <span style={{
           fontFamily: "'JetBrains Mono', monospace",
           fontSize: '0.7rem',
-          color: 'rgba(240,235,228,0.25)',
+          color: 'rgba(var(--text-rgb),0.25)',
           letterSpacing: '0.05em',
         }}>
           {project.year}
@@ -176,7 +176,7 @@ export default function ProjectCard({ project, index, inView }: Props) {
           fontFamily: "'Syne', sans-serif",
           fontWeight: 600,
           fontSize: '0.75rem',
-          color: hovered ? '#f59e0b' : 'rgba(240,235,228,0.3)',
+          color: hovered ? 'var(--accent)' : 'rgba(var(--text-rgb),0.3)',
           letterSpacing: '0.06em',
           textTransform: 'uppercase',
           transition: 'color 0.2s ease',

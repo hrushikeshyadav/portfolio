@@ -1,9 +1,7 @@
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, useEffect, type ReactNode, type CSSProperties } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Download, Mail, MapPin, Phone } from 'lucide-react'
+import { Download, Mail, MapPin, Phone } from 'lucide-react'
 import { GithubIcon, LinkedinIcon } from '../components/ui/Icons'
-import { useNavigate } from '@tanstack/react-router'
-import ResumeScene from '../components/3d/ResumeScene'
 import {
   personal, summary, experience, skills, softSkills, education, languages,
 } from '../data/resume'
@@ -13,7 +11,6 @@ const PDFDownloadLink = lazy(() =>
 )
 const ResumePDF = lazy(() => import('../components/resume/ResumePDF'))
 
-const ACCENT = '#ff4500'
 const C = personal.contact
 
 const CONTACT = [
@@ -24,270 +21,222 @@ const CONTACT = [
   { icon: MapPin, text: C.location, href: null },
 ]
 
-// ── Download button ───────────────────────────────────────────────────────────
-
-function DownloadButton({ dark = false }: { dark?: boolean }) {
+// ── Download button ────────────────────────────────────────────────────────
+function DownloadButton() {
   return (
     <Suspense fallback={
-      <button disabled style={{
-        display: 'flex', alignItems: 'center', gap: 7,
-        padding: '0.65rem 1.5rem',
-        background: 'rgba(255,69,0,0.08)', border: '1px solid rgba(255,69,0,0.2)',
-        color: 'rgba(255,69,0,0.4)',
-        fontFamily: "'DM Mono', monospace", fontSize: '0.72rem', letterSpacing: '0.05em',
+      <span className="glass glass-warm glass-rim" style={{
+        display: 'inline-flex', alignItems: 'center', gap: 8,
+        padding: '0.8rem 1.6rem', ['--glass-radius' as string]: '999px',
+        color: 'var(--text)', fontFamily: "'Bricolage Grotesque', sans-serif",
+        fontWeight: 700, fontSize: '0.9rem',
       }}>
-        <Download size={13} /> Loading…
-      </button>
+        <Download size={16} /> Preparing…
+      </span>
     }>
       <PDFDownloadLink document={<ResumePDF />} fileName="Hrushikesh_Yadav_Resume.pdf" style={{ textDecoration: 'none' }}>
         {({ loading }) => (
-          <button
-            className={dark ? 'glass glass-warm glass-interactive glass-rim glass-sheen' : ''}
-            style={{
-            display: 'flex', alignItems: 'center', gap: 7,
-            padding: '0.65rem 1.5rem',
-            ['--glass-radius' as string]: '10px',
-            ['--glass-blur' as string]: '10px',
-            background: dark ? undefined : (loading ? 'rgba(255,69,0,0.08)' : '#ff4500'),
-            border: dark ? undefined : 'none',
-            color: loading ? '#ff8a4c' : (dark ? '#ff8a4c' : '#000'),
-            fontFamily: "'Bricolage Grotesque', sans-serif",
-            fontWeight: 700, fontSize: '0.82rem', letterSpacing: '-0.01em',
-            cursor: loading ? 'default' : 'pointer',
-            transition: dark ? undefined : 'all 0.25s ease',
-          }}
-            onMouseEnter={e => { if (!loading && !dark) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(255,69,0,0.35)' } }}
-            onMouseLeave={e => { if (!dark) { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '' } }}
-          >
-            <Download size={14} />
-            {loading ? 'Preparing…' : 'Download PDF'}
-          </button>
+          <span className="glass glass-warm glass-interactive glass-rim glass-sheen" style={{
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+            padding: '0.8rem 1.6rem', ['--glass-radius' as string]: '999px',
+            color: 'var(--text)', fontFamily: "'Bricolage Grotesque', sans-serif",
+            fontWeight: 700, fontSize: '0.9rem', letterSpacing: '-0.01em',
+          }}>
+            <Download size={16} /> {loading ? 'Preparing…' : 'Download PDF'}
+          </span>
         )}
       </PDFDownloadLink>
     </Suspense>
   )
 }
 
-// ── Page ─────────────────────────────────────────────────────────────────────
+const fade = (delay = 0) => ({
+  initial: { opacity: 0, y: 22 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '-60px' },
+  transition: { duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] as const },
+})
 
-export default function ResumePage() {
-  const navigate = useNavigate()
-
+function Card({ children, style }: { children: ReactNode; style?: CSSProperties }) {
   return (
-    <div style={{ background: '#000', minHeight: '100dvh' }}>
+    <div className="glass glass-rim" style={{
+      ['--glass-radius' as string]: '20px',
+      ['--glass-blur' as string]: '16px',
+      padding: 'clamp(1.5rem, 3vw, 2.5rem)',
+      ...style,
+    }}>{children}</div>
+  )
+}
 
-      {/* ── Sticky top bar ── */}
-      <div style={{
-        position: 'sticky', top: 64, zIndex: 100,
-        background: 'rgba(0,0,0,0.88)', backdropFilter: 'blur(24px)',
-        borderBottom: '1px solid rgba(255,255,255,0.06)',
-      }}>
-        <div style={{
-          maxWidth: 960, margin: '0 auto', padding: '0.7rem 1.5rem',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        }}>
-          <button onClick={() => navigate({ to: '/' })}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 7,
-              background: 'none', border: 'none', color: 'rgba(245,245,247,0.35)',
-              fontFamily: "'DM Mono', monospace", fontSize: '0.7rem',
-              letterSpacing: '0.06em', cursor: 'pointer', transition: 'color 0.2s',
-            }}
-            onMouseEnter={e => (e.currentTarget.style.color = '#f5f5f7')}
-            onMouseLeave={e => (e.currentTarget.style.color = 'rgba(245,245,247,0.35)')}
-          >
-            <ArrowLeft size={13} /> Back to Portfolio
-          </button>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.62rem', color: 'rgba(245,245,247,0.15)', letterSpacing: '0.1em' }}>
-              ATS-FRIENDLY
-            </span>
-            <DownloadButton dark />
-          </div>
-        </div>
-      </div>
-
-      {/* ── Three.js hero ── */}
-      <div style={{ position: 'relative', overflow: 'hidden' }}>
-        <ResumeScene height={360} />
-        <div style={{
-          position: 'absolute', inset: 0,
-          display: 'flex', flexDirection: 'column',
-          alignItems: 'center', justifyContent: 'center',
-          background: 'linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.55) 100%)',
-          pointerEvents: 'none',
-        }}>
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            style={{ textAlign: 'center' }}
-          >
-            <div style={{
-              fontFamily: "'Bricolage Grotesque', sans-serif",
-              fontWeight: 800, fontSize: 'clamp(2rem, 5vw, 3.5rem)',
-              color: '#f5f5f7', letterSpacing: '-0.04em', lineHeight: 1,
-              marginBottom: '0.5rem',
-            }}>{personal.name}</div>
-            <div style={{
-              fontFamily: "'DM Mono', monospace", fontSize: '0.72rem',
-              color: '#ff4500', letterSpacing: '0.14em', textTransform: 'uppercase',
-              marginBottom: '1.25rem',
-            }}>{personal.title}</div>
-            <div style={{ pointerEvents: 'auto' }}>
-              <DownloadButton />
-            </div>
-          </motion.div>
-        </div>
-        <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0, height: 80,
-          background: 'linear-gradient(to bottom, transparent, #f8f8f8)',
-          pointerEvents: 'none',
-        }} />
-      </div>
-
-      {/* ── Resume paper ── */}
-      <div style={{ maxWidth: 960, margin: '0 auto', padding: '0 1.5rem 6rem' }}>
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-          className="resume-paper"
-          style={{ background: '#fff', color: '#1a1a1a' }}
-        >
-
-          {/* Header band */}
-          <div style={{ padding: 'clamp(1.75rem,3vw,2.75rem) clamp(1.75rem,4vw,3rem) clamp(1.25rem,2vw,2rem)', borderBottom: '2px solid #111' }}>
-            <h1 style={{
-              fontFamily: "'Bricolage Grotesque', sans-serif",
-              fontWeight: 800, fontSize: 'clamp(1.8rem,4vw,2.6rem)',
-              letterSpacing: '-0.035em', color: '#0a0a0a', margin: '0 0 0.2rem',
-            }}>{personal.name}</h1>
-            <p style={{
-              fontFamily: "'DM Mono', monospace", fontSize: '0.72rem',
-              color: '#555', letterSpacing: '0.1em', textTransform: 'uppercase', margin: '0 0 1.25rem',
-            }}>{personal.title}</p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem 2rem' }}>
-              {CONTACT.map(({ icon: Icon, text, href }) => (
-                <div key={text} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <Icon size={12} style={{ color: ACCENT, flexShrink: 0 }} />
-                  {href
-                    ? <a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer" style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.72rem', color: '#1a56db', textDecoration: 'none' }}>{text}</a>
-                    : <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.72rem', color: '#555' }}>{text}</span>
-                  }
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Body */}
-          <div style={{ padding: 'clamp(1.5rem,3vw,2.25rem) clamp(1.75rem,4vw,3rem) clamp(2rem,4vw,3rem)', display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
-
-            <ResumeSection title="Summary">
-              <p style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: '0.93rem', color: '#2a2a2a', lineHeight: 1.72, margin: 0 }}>
-                {summary}
-              </p>
-            </ResumeSection>
-
-            <ResumeSection title="Work Experience">
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.4rem' }}>
-                {experience.map(exp => (
-                  <div key={exp.role + exp.duration}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', alignItems: 'baseline', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                      <div>
-                        <span style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 700, fontSize: '1rem', color: '#0a0a0a' }}>{exp.role}</span>
-                        <span style={{ color: '#bbb', margin: '0 0.45rem' }}>·</span>
-                        <span style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 600, fontSize: '0.95rem', color: ACCENT }}>{exp.company}</span>
-                      </div>
-                      <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.68rem', color: '#777' }}>{exp.duration}</span>
-                    </div>
-                    <ul style={{ margin: 0, paddingLeft: '1rem', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                      {exp.highlights.map((b, i) => (
-                        <li key={i} style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: '0.86rem', color: '#333', lineHeight: 1.6 }}>{b}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </ResumeSection>
-
-            {/* Two-column lower block */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.75rem' }} className="resume-lower">
-              <ResumeSection title="Skills">
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.7rem' }}>
-                  {skills.map(g => (
-                    <div key={g.label}>
-                      <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.62rem', color: ACCENT, letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 700, marginBottom: '0.35rem' }}>{g.label}</div>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
-                        {g.items.map(item => (
-                          <span key={item} style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: '0.78rem', color: '#2a2a2a', fontWeight: 500, padding: '2px 9px', background: '#f5f5f7', border: '1px solid #e6e6e9' }}>{item}</span>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </ResumeSection>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
-                <ResumeSection title="Education">
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-                    {education.map(e => (
-                      <div key={e.degree}>
-                        <div style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 700, fontSize: '0.9rem', color: '#0a0a0a' }}>{e.degree}</div>
-                        <div style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: '0.8rem', color: '#666', lineHeight: 1.45 }}>{e.institution}</div>
-                        <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.66rem', color: ACCENT, marginTop: 2 }}>{e.year}</div>
-                      </div>
-                    ))}
-                  </div>
-                </ResumeSection>
-
-                <ResumeSection title="Soft Skills">
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
-                    {softSkills.map(sk => (
-                      <span key={sk} style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: '0.78rem', color: '#2a2a2a', fontWeight: 500, padding: '3px 10px', background: '#f5f5f7', border: '1px solid #e6e6e9', borderRadius: 100 }}>{sk}</span>
-                    ))}
-                  </div>
-                </ResumeSection>
-
-                <ResumeSection title="Languages">
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
-                    {languages.map(l => (
-                      <span key={l} style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: '0.78rem', color: '#2a2a2a', fontWeight: 500, padding: '3px 10px', background: '#f5f5f7', border: '1px solid #e6e6e9' }}>{l}</span>
-                    ))}
-                  </div>
-                </ResumeSection>
-              </div>
-            </div>
-
-          </div>
-        </motion.div>
-
-        <p style={{ textAlign: 'center', marginTop: '1.5rem', fontFamily: "'DM Mono', monospace", fontSize: '0.6rem', color: 'rgba(245,245,247,0.18)', letterSpacing: '0.1em' }}>
-          DOWNLOADS AS A PROFESSIONAL PDF · TEXT-BASED · ATS-FRIENDLY
-        </p>
-      </div>
-
-      <style>{`
-        @media (min-width: 820px) {
-          .resume-lower { grid-template-columns: 1.2fr 0.8fr !important; gap: 2.5rem !important; }
-        }
-      `}</style>
+function Eyebrow({ children }: { children: ReactNode }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '1.25rem' }}>
+      <span style={{ width: 24, height: '1.5px', background: 'var(--accent)' }} />
+      <span style={{
+        fontFamily: "'DM Mono', monospace", fontSize: '0.62rem',
+        color: 'var(--accent)', letterSpacing: '0.14em', textTransform: 'uppercase',
+      }}>{children}</span>
     </div>
   )
 }
 
-function ResumeSection({ title, children }: { title: string; children: React.ReactNode }) {
+function Pill({ children }: { children: ReactNode }) {
   return (
-    <div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.9rem' }}>
-        <h2 style={{
-          fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 800,
-          fontSize: '0.65rem', letterSpacing: '0.14em', textTransform: 'uppercase',
-          color: '#0a0a0a', margin: 0, whiteSpace: 'nowrap',
-        }}>{title}</h2>
-        <div style={{ flex: 1, height: '1px', background: '#d8d8d8' }} />
+    <span className="glass glass-rim" style={{
+      ['--glass-radius' as string]: '100px', ['--glass-blur' as string]: '6px',
+      padding: '0.35rem 0.75rem',
+      fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 500,
+      fontSize: '0.8rem', color: 'rgba(var(--text-rgb),0.8)',
+    }}>{children}</span>
+  )
+}
+
+// ── Page ───────────────────────────────────────────────────────────────────
+export default function ResumePage() {
+  useEffect(() => {
+    const lenis = (window as unknown as { lenis?: { scrollTo: (t: number, o?: object) => void } }).lenis
+    if (lenis) lenis.scrollTo(0, { immediate: true })
+    else window.scrollTo(0, 0)
+  }, [])
+
+  return (
+    <div style={{
+      maxWidth: 1000, margin: '0 auto',
+      padding: 'clamp(6rem, 14vw, 9rem) clamp(1.25rem, 5vw, 2.5rem) 4rem',
+    }}>
+      {/* Header */}
+      <motion.div {...fade()} style={{ marginBottom: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
+        <Eyebrow>Résumé · {personal.title}</Eyebrow>
+        <div style={{
+          display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end',
+          justifyContent: 'space-between', gap: '1.5rem',
+        }}>
+          <h1 style={{
+            fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 800,
+            fontSize: 'clamp(2.4rem, 8vw, 4.5rem)', letterSpacing: '-0.045em',
+            lineHeight: 0.95, color: 'var(--text)', margin: 0,
+          }}>{personal.name}</h1>
+          <DownloadButton />
+        </div>
+
+        {/* Contact chips */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '1.75rem' }}>
+          {CONTACT.map(({ icon: Icon, text, href }) => {
+            const inner = (
+              <>
+                <Icon size={13} style={{ color: 'var(--accent)', flexShrink: 0 }} />
+                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.72rem', color: 'rgba(var(--text-rgb),0.7)' }}>{text}</span>
+              </>
+            )
+            const css: CSSProperties = {
+              display: 'inline-flex', alignItems: 'center', gap: 7,
+              ['--glass-radius' as string]: '100px', ['--glass-blur' as string]: '8px',
+              padding: '0.4rem 0.8rem', textDecoration: 'none',
+            }
+            return href
+              ? <a key={text} href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer" className="glass glass-interactive glass-rim" style={css}>{inner}</a>
+              : <span key={text} className="glass glass-rim" style={css}>{inner}</span>
+          })}
+        </div>
+      </motion.div>
+
+      {/* Summary */}
+      <motion.div {...fade(0.05)} style={{ marginBottom: 'clamp(1rem, 2.5vw, 1.5rem)' }}>
+        <Card>
+          <Eyebrow>Summary</Eyebrow>
+          <p style={{
+            fontFamily: "'Bricolage Grotesque', sans-serif",
+            fontSize: 'clamp(1rem, 1.7vw, 1.2rem)', lineHeight: 1.7,
+            color: 'rgba(var(--text-rgb),0.78)', margin: 0, letterSpacing: '-0.01em',
+          }}>{summary}</p>
+        </Card>
+      </motion.div>
+
+      {/* Experience */}
+      <motion.div {...fade(0.1)} style={{ marginBottom: 'clamp(1rem, 2.5vw, 1.5rem)' }}>
+        <Card>
+          <Eyebrow>Experience</Eyebrow>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(1.5rem, 3vw, 2.25rem)' }}>
+            {experience.map((exp, i) => (
+              <div key={exp.role + exp.duration} style={{
+                paddingTop: i === 0 ? 0 : 'clamp(1.5rem, 3vw, 2.25rem)',
+                borderTop: i === 0 ? 'none' : '1px solid rgba(var(--border-rgb),0.1)',
+              }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'baseline', gap: '0.35rem 1rem', marginBottom: '0.85rem' }}>
+                  <div>
+                    <span style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 700, fontSize: 'clamp(1.1rem,2vw,1.3rem)', color: 'var(--text)', letterSpacing: '-0.02em' }}>{exp.role}</span>
+                    <span style={{ color: 'rgba(var(--text-rgb),0.3)', margin: '0 0.5rem' }}>·</span>
+                    <span style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 600, fontSize: '0.95rem', color: 'var(--accent)' }}>{exp.company}</span>
+                  </div>
+                  <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.68rem', color: 'rgba(var(--text-rgb),0.45)' }}>{exp.duration}</span>
+                </div>
+                <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.55rem' }}>
+                  {exp.highlights.map((h, hi) => (
+                    <li key={hi} style={{ display: 'flex', gap: 10 }}>
+                      <span style={{ color: 'rgba(var(--accent-rgb),0.7)', flexShrink: 0, marginTop: 1, fontSize: '0.7rem' }}>▹</span>
+                      <span style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: 'clamp(0.85rem,1.3vw,0.95rem)', color: 'rgba(var(--text-rgb),0.6)', lineHeight: 1.6, letterSpacing: '-0.01em' }}>{h}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </motion.div>
+
+      {/* Lower: skills + side */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 'clamp(1rem, 2.5vw, 1.5rem)' }} className="resume-lower">
+        <motion.div {...fade(0.12)}>
+          <Card style={{ height: '100%' }}>
+            <Eyebrow>Skills</Eyebrow>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
+              {skills.map((g) => (
+                <div key={g.label}>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.6rem', color: 'var(--accent)', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 500, marginBottom: '0.6rem' }}>{g.label}</div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+                    {g.items.map((it) => <Pill key={it}>{it}</Pill>)}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </motion.div>
+
+        <motion.div {...fade(0.16)} style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(1rem, 2.5vw, 1.5rem)' }}>
+          <Card>
+            <Eyebrow>Education</Eyebrow>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              {education.map((e) => (
+                <div key={e.degree}>
+                  <div style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 700, fontSize: '0.98rem', color: 'var(--text)' }}>{e.degree}</div>
+                  <div style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: '0.85rem', color: 'rgba(var(--text-rgb),0.5)', lineHeight: 1.45 }}>{e.institution}</div>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.66rem', color: 'var(--accent)', marginTop: 3 }}>{e.year}</div>
+                </div>
+              ))}
+            </div>
+          </Card>
+          <Card>
+            <Eyebrow>Strengths</Eyebrow>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginBottom: '1.25rem' }}>
+              {softSkills.map((s) => <Pill key={s}>{s}</Pill>)}
+            </div>
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.6rem', color: 'var(--accent)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.6rem' }}>Languages</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+              {languages.map((l) => <Pill key={l}>{l}</Pill>)}
+            </div>
+          </Card>
+        </motion.div>
       </div>
-      {children}
+
+      <p style={{ textAlign: 'center', marginTop: '2.5rem', fontFamily: "'DM Mono', monospace", fontSize: '0.6rem', color: 'rgba(var(--text-rgb),0.35)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+        Downloads as a clean, ATS-friendly PDF
+      </p>
+
+      <style>{`
+        @media (min-width: 840px) {
+          .resume-lower { grid-template-columns: 1.25fr 0.75fr !important; align-items: start; }
+        }
+      `}</style>
     </div>
   )
 }

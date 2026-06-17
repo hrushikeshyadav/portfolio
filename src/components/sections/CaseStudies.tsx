@@ -14,7 +14,7 @@ function Chapter({ cs }: { cs: CaseStudy }) {
       ref={ref}
       style={{
         position: 'relative',
-        borderTop: '1px solid rgba(255,255,255,0.08)',
+        borderTop: '1px solid rgba(var(--border-rgb),0.08)',
         padding: 'clamp(3.5rem,8vw,6.5rem) 0',
       }}
     >
@@ -48,7 +48,7 @@ function Chapter({ cs }: { cs: CaseStudy }) {
                 <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.62rem', color: cs.accent, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
                   {cs.category}
                 </span>
-                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.62rem', color: 'rgba(245,245,247,0.28)', letterSpacing: '0.06em' }}>
+                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.62rem', color: 'rgba(var(--text-rgb),0.28)', letterSpacing: '0.06em' }}>
                   · {cs.period}
                 </span>
               </div>
@@ -56,7 +56,7 @@ function Chapter({ cs }: { cs: CaseStudy }) {
               <h3 style={{
                 fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 800,
                 fontSize: 'clamp(2.8rem,7vw,5rem)', letterSpacing: '-0.045em',
-                color: '#f5f5f7', lineHeight: 0.92, margin: '0 0 0.5rem',
+                color: 'var(--text)', lineHeight: 0.92, margin: '0 0 0.5rem',
               }}>{cs.name}</h3>
 
               <p style={{
@@ -77,12 +77,12 @@ function Chapter({ cs }: { cs: CaseStudy }) {
                   >
                     <div style={{
                       fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 800,
-                      fontSize: 'clamp(1.6rem,3.2vw,2.4rem)', color: '#f5f5f7',
+                      fontSize: 'clamp(1.6rem,3.2vw,2.4rem)', color: 'var(--text)',
                       lineHeight: 1, letterSpacing: '-0.04em', marginBottom: '0.35rem',
                     }}>{m.value}</div>
                     <div style={{
                       fontFamily: "'DM Mono', monospace", fontSize: '0.56rem',
-                      color: 'rgba(245,245,247,0.32)', letterSpacing: '0.06em', textTransform: 'uppercase',
+                      color: 'rgba(var(--text-rgb),0.32)', letterSpacing: '0.06em', textTransform: 'uppercase',
                     }}>{m.label}</div>
                   </motion.div>
                 ))}
@@ -101,7 +101,7 @@ function Chapter({ cs }: { cs: CaseStudy }) {
             style={{
               fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 500,
               fontSize: 'clamp(1.15rem,2vw,1.6rem)', lineHeight: 1.45,
-              letterSpacing: '-0.02em', color: 'rgba(245,245,247,0.92)', margin: 0,
+              letterSpacing: '-0.02em', color: 'rgba(var(--text-rgb),0.92)', margin: 0,
             }}
           >{cs.summary}</motion.p>
 
@@ -117,7 +117,7 @@ function Chapter({ cs }: { cs: CaseStudy }) {
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 7,
                   fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 500,
-                  fontSize: '0.85rem', color: 'rgba(245,245,247,0.72)',
+                  fontSize: '0.85rem', color: 'rgba(var(--text-rgb),0.72)',
                   ['--glass-radius' as string]: '100px',
                   ['--glass-blur' as string]: '8px',
                   padding: '0.45rem 0.85rem',
@@ -133,9 +133,9 @@ function Chapter({ cs }: { cs: CaseStudy }) {
           {cs.detail && (
             <p style={{
               fontFamily: "'Bricolage Grotesque', sans-serif",
-              fontSize: '0.9rem', lineHeight: 1.7, color: 'rgba(245,245,247,0.4)',
+              fontSize: '0.9rem', lineHeight: 1.7, color: 'rgba(var(--text-rgb),0.4)',
               letterSpacing: '-0.01em', margin: 0,
-              borderLeft: '2px solid rgba(255,255,255,0.1)', paddingLeft: '1rem',
+              borderLeft: '2px solid rgba(var(--border-rgb),0.1)', paddingLeft: '1rem',
             }}>{cs.detail}</p>
           )}
 
@@ -144,8 +144,8 @@ function Chapter({ cs }: { cs: CaseStudy }) {
             {cs.tech.map((t) => (
               <span key={t} style={{
                 fontFamily: "'DM Mono', monospace", fontSize: '0.58rem',
-                color: 'rgba(245,245,247,0.4)', letterSpacing: '0.04em',
-                padding: '0.18rem 0.55rem', border: '1px solid rgba(255,255,255,0.07)',
+                color: 'rgba(var(--text-rgb),0.4)', letterSpacing: '0.04em',
+                padding: '0.18rem 0.55rem', border: '1px solid rgba(var(--border-rgb),0.07)',
               }}>{t}</span>
             ))}
           </div>
@@ -187,10 +187,10 @@ export default function CaseStudies() {
 
   return (
     <section id="work" ref={ref} style={{
-      background: '#0c0c0d',
+      background: 'rgba(var(--bg-rgb), 0.66)',
       padding: 'clamp(6rem,12vw,10rem) clamp(1.5rem,5vw,4rem) clamp(3rem,6vw,5rem)',
       position: 'relative',
-      borderTop: '1px solid rgba(255,255,255,0.06)',
+      borderTop: '1px solid rgba(var(--border-rgb),0.06)',
     }}>
       <div style={{ maxWidth: 1280, margin: '0 auto' }}>
         {/* Header */}
@@ -201,15 +201,15 @@ export default function CaseStudies() {
           style={{ marginBottom: 'clamp(1rem,3vw,2rem)' }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '1.25rem' }}>
-            <span style={{ width: 28, height: '1.5px', background: '#ff4500', display: 'inline-block' }} />
-            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.62rem', color: '#ff4500', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
+            <span style={{ width: 28, height: '1.5px', background: 'var(--accent)', display: 'inline-block' }} />
+            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.62rem', color: 'var(--accent)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
               Selected Work
             </span>
           </div>
           <h2 style={{
             fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 800,
             fontSize: 'clamp(2.4rem,5.5vw,4.5rem)', letterSpacing: '-0.04em',
-            color: '#f5f5f7', lineHeight: 1, margin: 0, maxWidth: 800,
+            color: 'var(--text)', lineHeight: 1, margin: 0, maxWidth: 800,
           }}>Four products. 4.5+ years. Built to last.</h2>
         </motion.div>
 

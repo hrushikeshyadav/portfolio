@@ -98,14 +98,14 @@ export default function Cursor() {
         }
         .cur-dot {
           width: 6px; height: 6px;
-          background: #f5f0eb;
+          background: var(--text);
           border-radius: 50%;
           z-index: 99999;
           transition: opacity 0.3s ease, width 0.2s ease, height 0.2s ease, background 0.2s ease;
         }
         .cur-ring {
           width: 36px; height: 36px;
-          border: 1.5px solid rgba(245, 240, 235, 0.35);
+          border: 1.5px solid rgba(var(--text-rgb), 0.35);
           border-radius: 50%;
           z-index: 99998;
           transition:
@@ -121,23 +121,23 @@ export default function Cursor() {
         /* Hover state */
         .cur-dot.cur-hover {
           width: 8px; height: 8px;
-          background: #ff4500;
+          background: var(--accent);
         }
         .cur-ring.cur-hover {
           width: 52px; height: 52px;
-          border-color: rgba(255, 69, 0, 0.6);
-          background: rgba(255, 69, 0, 0.08);
+          border-color: rgba(var(--accent-rgb), 0.6);
+          background: rgba(var(--accent-rgb), 0.08);
         }
 
         /* Click state */
         .cur-dot.cur-click {
           width: 5px; height: 5px;
-          background: #ff4500;
+          background: var(--accent);
         }
         .cur-ring.cur-click {
           width: 26px; height: 26px;
-          border-color: rgba(255, 69, 0, 0.9);
-          background: rgba(255, 69, 0, 0.15);
+          border-color: rgba(var(--accent-rgb), 0.9);
+          background: rgba(var(--accent-rgb), 0.15);
         }
       `}</style>
 

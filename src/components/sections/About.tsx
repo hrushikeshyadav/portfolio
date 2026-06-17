@@ -26,14 +26,14 @@ export default function About() {
   return (
     <section id="about" ref={ref} style={{
       padding: 'clamp(7rem, 14vw, 12rem) clamp(1.5rem,5vw,4rem)',
-      background: '#0a0a0b',
+      background: 'rgba(var(--bg-rgb), 0.72)',
       position: 'relative',
-      borderTop: '1px solid rgba(255,255,255,0.06)',
+      borderTop: '1px solid rgba(var(--border-rgb),0.06)',
     }}>
       <div style={{
         position: 'absolute', top: '3rem', right: 'clamp(1.5rem,5vw,4rem)',
         fontFamily: "'DM Mono', monospace", fontSize: '0.62rem',
-        color: 'rgba(255,255,255,0.06)', letterSpacing: '0.14em', userSelect: 'none',
+        color: 'rgba(var(--border-rgb),0.06)', letterSpacing: '0.14em', userSelect: 'none',
       }}>02 / ABOUT</div>
 
       <div style={{ maxWidth: 1280, margin: '0 auto' }}>
@@ -45,10 +45,10 @@ export default function About() {
           transition={{ duration: 0.5 }}
           style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '2.5rem' }}
         >
-          <span style={{ width: 28, height: '1.5px', background: '#ff4500', display: 'inline-block' }} />
+          <span style={{ width: 28, height: '1.5px', background: 'var(--accent)', display: 'inline-block' }} />
           <span style={{
             fontFamily: "'DM Mono', monospace", fontSize: '0.62rem',
-            color: '#ff4500', letterSpacing: '0.14em', textTransform: 'uppercase',
+            color: 'var(--accent)', letterSpacing: '0.14em', textTransform: 'uppercase',
           }}>About · Philosophy</span>
         </motion.div>
 
@@ -61,10 +61,10 @@ export default function About() {
             fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 800,
             fontSize: 'clamp(2.2rem, 5.5vw, 4.8rem)',
             lineHeight: 1.02, letterSpacing: '-0.045em',
-            color: '#f5f5f7', margin: '0 0 1.75rem', maxWidth: 1100,
+            color: 'var(--text)', margin: '0 0 1.75rem', maxWidth: 1100,
           }}>
           I build the parts users never notice —{' '}
-          <span style={{ color: 'rgba(245,245,247,0.22)', fontWeight: 300 }}>
+          <span style={{ color: 'rgba(var(--text-rgb),0.22)', fontWeight: 300 }}>
             because they just work.
           </span>
         </motion.h2>
@@ -76,19 +76,19 @@ export default function About() {
           style={{
             fontFamily: "'Bricolage Grotesque', sans-serif",
             fontSize: 'clamp(1rem, 1.6vw, 1.2rem)',
-            color: 'rgba(245,245,247,0.45)',
+            color: 'rgba(var(--text-rgb),0.45)',
             lineHeight: 1.75, maxWidth: 620, letterSpacing: '-0.01em',
             margin: '0 0 clamp(4rem,8vw,7rem)',
           }}>
           Senior engineer at{' '}
-          <span style={{ color: '#f5f5f7', fontWeight: 600 }}>Logicwind</span>
+          <span style={{ color: 'var(--text)', fontWeight: 600 }}>Logicwind</span>
           {' '}— a product studio that ships SaaS from zero to launch. I own the
           frontend architecture, the GraphQL API layer, and the AI integration
           stack across multiple live products.
         </motion.p>
 
         {/* Philosophy — editorial numbered rows */}
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+        <div style={{ borderTop: '1px solid rgba(var(--border-rgb),0.1)' }}>
           {PHILOSOPHY.map((p, i) => (
             <motion.div
               key={p.no}
@@ -99,25 +99,25 @@ export default function About() {
                 display: 'grid', gridTemplateColumns: '1fr',
                 gap: '0.75rem 3rem',
                 padding: 'clamp(2rem,4vw,3rem) 0',
-                borderBottom: '1px solid rgba(255,255,255,0.1)',
+                borderBottom: '1px solid rgba(var(--border-rgb),0.1)',
               }}
               className="phil-row"
             >
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '1.25rem' }}>
                 <span style={{
                   fontFamily: "'DM Mono', monospace", fontSize: '0.7rem',
-                  color: '#ff4500', letterSpacing: '0.06em', flexShrink: 0,
+                  color: 'var(--accent)', letterSpacing: '0.06em', flexShrink: 0,
                 }}>{p.no}</span>
                 <h3 style={{
                   fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 700,
                   fontSize: 'clamp(1.5rem,3.5vw,2.6rem)', letterSpacing: '-0.035em',
-                  color: '#f5f5f7', lineHeight: 1.05, margin: 0,
+                  color: 'var(--text)', lineHeight: 1.05, margin: 0,
                 }}>{p.title}</h3>
               </div>
               <p style={{
                 fontFamily: "'Bricolage Grotesque', sans-serif",
                 fontSize: 'clamp(0.95rem,1.4vw,1.1rem)',
-                color: 'rgba(245,245,247,0.45)', lineHeight: 1.7,
+                color: 'rgba(var(--text-rgb),0.45)', lineHeight: 1.7,
                 letterSpacing: '-0.01em', margin: 0, maxWidth: 520,
               }}>{p.body}</p>
             </motion.div>

@@ -12,7 +12,7 @@ const COLORS: Record<string, string> = {
 
 function Row({ project, i, inView }: { project: (typeof allProjects)[0]; i: number; inView: boolean }) {
   const [hover, setHover] = useState(false)
-  const accent = COLORS[project.id] ?? '#ff4500'
+  const accent = COLORS[project.id] ?? '#5a8cff'
 
   return (
     <motion.div
@@ -23,7 +23,7 @@ function Row({ project, i, inView }: { project: (typeof allProjects)[0]; i: numb
       onMouseLeave={() => setHover(false)}
       style={{
         position: 'relative',
-        borderBottom: '1px solid rgba(255,255,255,0.08)',
+        borderBottom: '1px solid rgba(var(--border-rgb),0.08)',
         cursor: 'default',
         overflow: 'hidden',
       }}
@@ -48,7 +48,7 @@ function Row({ project, i, inView }: { project: (typeof allProjects)[0]; i: numb
         {/* index */}
         <span style={{
           fontFamily: "'DM Mono', monospace", fontSize: '0.72rem',
-          color: hover ? accent : 'rgba(245,245,247,0.3)',
+          color: hover ? accent : 'rgba(var(--text-rgb),0.3)',
           letterSpacing: '0.04em', transition: 'color 0.3s', minWidth: 28,
         }}>{project.number}</span>
 
@@ -57,12 +57,12 @@ function Row({ project, i, inView }: { project: (typeof allProjects)[0]; i: numb
           <h3 style={{
             fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 800,
             fontSize: 'clamp(1.5rem,4vw,2.8rem)', letterSpacing: '-0.04em',
-            color: hover ? '#fff' : 'rgba(245,245,247,0.85)',
+            color: hover ? 'var(--text)' : 'rgba(var(--text-rgb),0.85)',
             lineHeight: 1, margin: 0, transition: 'color 0.3s',
           }}>{project.name}</h3>
           <span style={{
             fontFamily: "'DM Mono', monospace", fontSize: '0.62rem',
-            color: 'rgba(245,245,247,0.35)', letterSpacing: '0.08em', textTransform: 'uppercase',
+            color: 'rgba(var(--text-rgb),0.35)', letterSpacing: '0.08em', textTransform: 'uppercase',
           }}>{project.category}</span>
         </div>
 
@@ -71,18 +71,18 @@ function Row({ project, i, inView }: { project: (typeof allProjects)[0]; i: numb
           {project.link && (
             <span style={{
               fontFamily: "'DM Mono', monospace", fontSize: '0.56rem',
-              color: hover ? accent : 'rgba(245,245,247,0.25)',
+              color: hover ? accent : 'rgba(var(--text-rgb),0.25)',
               letterSpacing: '0.1em', textTransform: 'uppercase', transition: 'color 0.3s',
             }} className="live-badge">Live</span>
           )}
           <span style={{
             fontFamily: "'DM Mono', monospace", fontSize: '0.68rem',
-            color: 'rgba(245,245,247,0.35)', letterSpacing: '0.04em',
+            color: 'rgba(var(--text-rgb),0.35)', letterSpacing: '0.04em',
           }}>{project.year}</span>
           <ArrowUpRight
             size={20}
             style={{
-              color: hover ? accent : 'rgba(245,245,247,0.25)',
+              color: hover ? accent : 'rgba(var(--text-rgb),0.25)',
               transform: hover ? 'translate(2px,-2px)' : 'none',
               transition: 'all 0.3s', flexShrink: 0,
             }}
@@ -107,15 +107,15 @@ export default function Projects() {
 
   return (
     <section id="more" ref={ref} style={{
-      background: '#0a0a0b',
+      background: 'rgba(var(--bg-rgb), 0.72)',
       padding: 'clamp(6rem,12vw,10rem) clamp(1.5rem,5vw,4rem)',
       position: 'relative',
-      borderTop: '1px solid rgba(255,255,255,0.06)',
+      borderTop: '1px solid rgba(var(--border-rgb),0.06)',
     }}>
       <div style={{
         position: 'absolute', top: '3rem', right: 'clamp(1.5rem,5vw,4rem)',
         fontFamily: "'DM Mono', monospace", fontSize: '0.62rem',
-        color: 'rgba(255,255,255,0.06)', letterSpacing: '0.14em', userSelect: 'none',
+        color: 'rgba(var(--border-rgb),0.06)', letterSpacing: '0.14em', userSelect: 'none',
       }}>04 / INDEX</div>
 
       <div style={{ maxWidth: 1280, margin: '0 auto' }}>
@@ -127,8 +127,8 @@ export default function Projects() {
           style={{ marginBottom: 'clamp(2.5rem,5vw,4rem)' }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '1.25rem' }}>
-            <span style={{ width: 28, height: '1.5px', background: '#ff4500', display: 'inline-block' }} />
-            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.62rem', color: '#ff4500', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
+            <span style={{ width: 28, height: '1.5px', background: 'var(--accent)', display: 'inline-block' }} />
+            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.62rem', color: 'var(--accent)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
               More Work
             </span>
           </div>
@@ -136,16 +136,16 @@ export default function Projects() {
             <h2 style={{
               fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 800,
               fontSize: 'clamp(2.4rem,5.5vw,4.5rem)', letterSpacing: '-0.04em',
-              color: '#f5f5f7', lineHeight: 1, margin: 0,
+              color: 'var(--text)', lineHeight: 1, margin: 0,
             }}>Beyond the deep dives</h2>
-            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.65rem', color: 'rgba(245,245,247,0.3)', letterSpacing: '0.06em' }}>
+            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.65rem', color: 'rgba(var(--text-rgb),0.3)', letterSpacing: '0.06em' }}>
               {allProjects.length} projects
             </span>
           </div>
         </motion.div>
 
         {/* Editorial index list */}
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+        <div style={{ borderTop: '1px solid rgba(var(--border-rgb),0.08)' }}>
           {allProjects.map((p, i) => <Row key={p.id} project={p} i={i} inView={inView} />)}
         </div>
       </div>
