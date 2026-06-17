@@ -44,52 +44,49 @@ export default function Hero() {
   return (
     <section ref={ref} style={{
       position: 'relative', minHeight: '100dvh',
-      background: '#0a0a0b',
+      background: 'rgba(var(--bg-rgb), 0.72)',
       display: 'flex', flexDirection: 'column',
       overflow: 'hidden',
     }}>
       {/* Very subtle radial glow */}
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
-        background: 'radial-gradient(ellipse 80% 60% at 50% 115%, rgba(255,69,0,0.06) 0%, transparent 60%)',
+        background: 'radial-gradient(ellipse 80% 60% at 50% 115%, rgba(var(--accent-rgb),0.06) 0%, transparent 60%)',
       }} />
 
       {/* Thin grid lines */}
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.025,
-        backgroundImage: 'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
+        backgroundImage: 'linear-gradient(rgba(var(--border-rgb),0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(var(--border-rgb),0.5) 1px, transparent 1px)',
         backgroundSize: '80px 80px',
       }} />
 
-      {/* 3D centerpiece — upper-right, behind the name */}
-      <div className="hero-3d" style={{
-        position: 'absolute', top: '-6%', right: '-8%',
-        width: 'min(70vw, 760px)', height: 'min(85vh, 760px)',
-        zIndex: 1, pointerEvents: 'none',
-      }}>
+      {/* 3D centerpiece — backdrop on mobile, upper-right on desktop (.hero-3d) */}
+      <div className="hero-3d">
         <HeroScene />
         {/* readability vignette toward the text side */}
         <div style={{
           position: 'absolute', inset: 0, pointerEvents: 'none',
-          background: 'radial-gradient(ellipse 60% 60% at 70% 40%, transparent 30%, rgba(10,10,11,0.55) 75%)',
+          background: 'radial-gradient(ellipse 60% 60% at 70% 40%, transparent 30%, rgba(var(--bg-rgb),0.55) 75%)',
         }} />
       </div>
 
       <motion.div style={{ y, opacity, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative', zIndex: 2 }}>
-        <div style={{ padding: 'clamp(7rem,12vw,9rem) clamp(1.5rem,5vw,4rem) 3rem', width: '100%', maxWidth: 1440, margin: '0 auto' }}>
+        <div style={{ padding: 'clamp(5.5rem,12vw,9rem) clamp(1.25rem,5vw,4rem) 3rem', width: '100%', maxWidth: 1440, margin: '0 auto' }}>
 
           {/* Available badge */}
           {mounted && (
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} style={{ marginBottom: '3rem' }}>
-              <span style={{
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} style={{ marginBottom: 'clamp(1.5rem, 4vw, 3rem)' }}>
+              <span className="glass glass-rim" style={{
                 display: 'inline-flex', alignItems: 'center', gap: 8,
                 padding: '0.4rem 1rem',
-                border: '1px solid rgba(48,209,88,0.3)',
-                background: 'rgba(48,209,88,0.06)',
+                ['--glass-radius' as string]: '999px',
+                ['--glass-blur' as string]: '8px',
+                border: '1px solid rgba(var(--green-rgb),0.28)',
                 fontFamily: "'DM Mono', monospace",
-                fontSize: '0.62rem', color: '#30d158', letterSpacing: '0.14em', textTransform: 'uppercase',
+                fontSize: '0.62rem', color: 'var(--green)', letterSpacing: '0.14em', textTransform: 'uppercase',
               }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#30d158', boxShadow: '0 0 8px #30d158' }} />
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--green)', boxShadow: '0 0 8px var(--green)' }} />
                 Available for work
               </span>
             </motion.div>
@@ -105,9 +102,9 @@ export default function Hero() {
                 style={{
                   fontFamily: "'Bricolage Grotesque', sans-serif",
                   fontWeight: 800,
-                  fontSize: 'clamp(4.5rem, 15.5vw, 15rem)',
+                  fontSize: 'clamp(3rem, 15.5vw, 15rem)',
                   letterSpacing: '-0.045em',
-                  color: '#f5f5f7',
+                  color: 'var(--text)',
                   lineHeight: 0.85,
                   whiteSpace: 'nowrap',
                 }}
@@ -124,10 +121,10 @@ export default function Hero() {
                 style={{
                   fontFamily: "'Bricolage Grotesque', sans-serif",
                   fontWeight: 800,
-                  fontSize: 'clamp(4.5rem, 15.5vw, 15rem)',
+                  fontSize: 'clamp(3rem, 15.5vw, 15rem)',
                   letterSpacing: '-0.045em',
                   lineHeight: 0.85,
-                  WebkitTextStroke: 'clamp(1px, 0.1vw, 2px) rgba(245,245,247,0.3)',
+                  WebkitTextStroke: 'clamp(1px, 0.1vw, 2px) rgba(var(--text-rgb),0.3)',
                   color: 'transparent',
                   whiteSpace: 'nowrap',
                 }}
@@ -145,26 +142,26 @@ export default function Hero() {
             >
               {/* Divider + role */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                <div style={{ width: 'clamp(24px,4vw,48px)', height: 1, background: '#ff4500' }} />
+                <div style={{ width: 'clamp(24px,4vw,48px)', height: 1, background: 'var(--accent)' }} />
                 <span style={{
                   fontFamily: "'DM Mono', monospace",
                   fontSize: 'clamp(0.72rem,1.2vw,0.9rem)',
-                  color: '#ff4500', letterSpacing: '0.04em',
-                  minWidth: 240, display: 'inline-block',
+                  color: 'var(--accent)', letterSpacing: '0.04em',
+                  minWidth: 'min(240px, 60vw)', display: 'inline-block',
                 }}>
                   {displayed}
-                  <span style={{ display: 'inline-block', width: 2, height: '0.9em', background: '#ff4500', marginLeft: 2, verticalAlign: 'middle', animation: 'blink 1s step-end infinite' }} />
+                  <span style={{ display: 'inline-block', width: 2, height: '0.9em', background: 'var(--accent)', marginLeft: 2, verticalAlign: 'middle', animation: 'blink 1s step-end infinite' }} />
                 </span>
               </div>
 
               <p style={{
                 fontFamily: "'Bricolage Grotesque', sans-serif",
                 fontSize: 'clamp(0.9rem,1.3vw,1.05rem)',
-                color: 'rgba(245,245,247,0.4)',
+                color: 'rgba(var(--text-rgb),0.4)',
                 lineHeight: 1.7, maxWidth: 420, letterSpacing: '-0.01em', margin: 0,
               }}>
                 Building production SaaS & AI platforms at{' '}
-                <span style={{ color: 'rgba(245,245,247,0.75)', fontWeight: 600 }}>Logicwind</span>
+                <span style={{ color: 'rgba(var(--text-rgb),0.75)', fontWeight: 600 }}>Logicwind</span>
                 {' '}— React · GraphQL · TypeScript
               </p>
             </motion.div>
@@ -182,23 +179,25 @@ export default function Hero() {
                 <button onClick={scrollDown} style={{
                   display: 'flex', alignItems: 'center', gap: 8,
                   padding: '0.9rem 2.25rem',
-                  background: '#ff4500', color: '#000',
+                  background: 'var(--accent)', color: 'var(--bg)',
                   fontFamily: "'Bricolage Grotesque', sans-serif",
                   fontWeight: 700, fontSize: '0.9rem', border: 'none',
                   letterSpacing: '-0.01em', cursor: 'pointer',
-                  boxShadow: '0 12px 40px rgba(255,69,0,0.25)',
+                  boxShadow: '0 12px 40px rgba(var(--accent-rgb),0.25)',
                 }}
                 >
                   View Work <ArrowDownRight size={16} />
                 </button>
               </Magnetic>
               <Magnetic strength={0.4}>
-                <a href="mailto:yadavhrushikesh21@gmail.com" style={{
+                <a href="mailto:yadavhrushikesh21@gmail.com"
+                  className="glass glass-interactive glass-rim glass-sheen"
+                  style={{
                   display: 'flex', alignItems: 'center', gap: 8,
                   padding: '0.9rem 2.25rem',
-                  background: 'transparent',
-                  border: '1px solid rgba(245,245,247,0.15)',
-                  color: 'rgba(245,245,247,0.7)',
+                  ['--glass-radius' as string]: '999px',
+                  ['--glass-blur' as string]: '12px',
+                  color: 'rgba(var(--text-rgb),0.82)',
                   fontFamily: "'Bricolage Grotesque', sans-serif",
                   fontWeight: 600, fontSize: '0.9rem',
                   textDecoration: 'none', letterSpacing: '-0.01em',
@@ -219,8 +218,8 @@ export default function Hero() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.9, duration: 0.6 }}
           style={{
-            borderTop: '1px solid rgba(255,255,255,0.07)',
-            background: 'rgba(10,10,11,0.85)',
+            borderTop: '1px solid rgba(var(--border-rgb),0.07)',
+            background: 'rgba(var(--bg-rgb),0.85)',
             backdropFilter: 'blur(20px)',
             position: 'relative', zIndex: 2,
           }}
@@ -239,17 +238,17 @@ export default function Hero() {
               <div key={s.n} style={{
                 paddingRight: 'clamp(1.5rem,4vw,3.5rem)',
                 marginRight: 'clamp(1.5rem,4vw,3.5rem)',
-                borderRight: i < 3 ? '1px solid rgba(255,255,255,0.07)' : 'none',
+                borderRight: i < 3 ? '1px solid rgba(var(--border-rgb),0.07)' : 'none',
                 flexShrink: 0,
               }}>
                 <div style={{
                   fontFamily: "'Bricolage Grotesque', sans-serif",
                   fontWeight: 800, fontSize: 'clamp(1.6rem,3vw,2rem)',
-                  color: '#ff4500', lineHeight: 1, letterSpacing: '-0.04em', marginBottom: '0.25rem',
+                  color: 'var(--accent)', lineHeight: 1, letterSpacing: '-0.04em', marginBottom: '0.25rem',
                 }}>{s.n}</div>
                 <div style={{
                   fontFamily: "'DM Mono', monospace", fontSize: '0.58rem',
-                  color: 'rgba(245,245,247,0.25)', letterSpacing: '0.08em', textTransform: 'uppercase',
+                  color: 'rgba(var(--text-rgb),0.25)', letterSpacing: '0.08em', textTransform: 'uppercase',
                 }}>{s.label}</div>
               </div>
             ))}

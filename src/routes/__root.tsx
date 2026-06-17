@@ -1,19 +1,25 @@
 import { Outlet } from '@tanstack/react-router'
-import Navbar from '../components/layout/Navbar'
+import TopControls from '../components/layout/TopControls'
+import FloatingTabBar from '../components/layout/FloatingTabBar'
 import Footer from '../components/layout/Footer'
 import Cursor from '../components/ui/Cursor'
 import SmoothScroll from '../components/ui/SmoothScroll'
+import { GlassFilterDefs } from '../components/ui/LiquidGlass'
+import AmbientScene from '../components/3d/AmbientScene'
 
 export default function RootLayout() {
   return (
-    <div style={{ background: '#0a0a0b', minHeight: '100dvh' }}>
+    <div style={{ position: 'relative', minHeight: '100dvh' }}>
+      <GlassFilterDefs />
+      <AmbientScene />
       <SmoothScroll />
       <Cursor />
-      <Navbar />
-      <main>
+      <TopControls />
+      <main style={{ position: 'relative', zIndex: 1 }}>
         <Outlet />
       </main>
       <Footer />
+      <FloatingTabBar />
     </div>
   )
 }

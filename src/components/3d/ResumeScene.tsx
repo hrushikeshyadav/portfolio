@@ -29,15 +29,15 @@ function CoreGeom() {
       {/* Outer icosahedron — wireframe orange */}
       <mesh ref={outer}>
         <icosahedronGeometry args={[1.8, 1]} />
-        <meshBasicMaterial color="#ff4500" wireframe transparent opacity={0.35} />
+        <meshBasicMaterial color="#5a8cff" wireframe transparent opacity={0.35} />
       </mesh>
-      {/* Inner solid — dark orange glow */}
+      {/* Inner solid — deep blue glow */}
       <mesh ref={inner} scale={0.72}>
         <icosahedronGeometry args={[1.8, 1]} />
         <meshPhongMaterial
-          color="#1a0600"
-          emissive="#ff2200"
-          emissiveIntensity={0.08}
+          color="#0a1230"
+          emissive="#5a8cff"
+          emissiveIntensity={0.1}
           transparent
           opacity={0.65}
           shininess={120}
@@ -46,7 +46,7 @@ function CoreGeom() {
       {/* Ring */}
       <mesh ref={ring}>
         <torusGeometry args={[2.4, 0.015, 8, 120]} />
-        <meshBasicMaterial color="#ff4500" transparent opacity={0.18} />
+        <meshBasicMaterial color="#7aa2ff" transparent opacity={0.18} />
       </mesh>
     </group>
   )
@@ -88,7 +88,7 @@ function OrbitalDots({ count = 120, radius = 3.8 }: { count?: number; radius?: n
 
   return (
     <points ref={points} geometry={geo}>
-      <pointsMaterial size={0.025} color="#ff6b35" transparent opacity={0.6} sizeAttenuation />
+      <pointsMaterial size={0.025} color="#ff8fb4" transparent opacity={0.6} sizeAttenuation />
     </points>
   )
 }
@@ -124,12 +124,12 @@ function GlowLight() {
       light.current.intensity = 1.2 + Math.sin(clock.elapsedTime * 0.8) * 0.3
     }
   })
-  return <pointLight ref={light} position={[0, 0, 3]} color="#ff4500" intensity={1.2} distance={12} />
+  return <pointLight ref={light} position={[0, 0, 3]} color="#5a8cff" intensity={1.2} distance={12} />
 }
 
 export default function ResumeScene({ height = 420 }: { height?: number }) {
   return (
-    <div style={{ width: '100%', height, background: '#000' }}>
+    <div style={{ width: '100%', height, background: 'rgba(var(--bg-rgb),0.9)' }}>
       <Canvas
         camera={{ position: [0, 0, 6.5], fov: 45 }}
         gl={{ antialias: true, alpha: true }}

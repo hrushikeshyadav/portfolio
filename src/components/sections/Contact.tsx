@@ -22,8 +22,8 @@ export default function Contact() {
   return (
     <section id="contact" ref={ref} style={{
       padding: 'clamp(7rem, 14vw, 12rem) clamp(1.5rem,5vw,4rem)',
-      background: '#0a0a0b',
-      borderTop: '1px solid rgba(255,255,255,0.06)',
+      background: 'rgba(var(--bg-rgb), 0.72)',
+      borderTop: '1px solid rgba(var(--border-rgb),0.06)',
       position: 'relative', overflow: 'hidden',
     }}>
       {/* Bg watermark */}
@@ -31,7 +31,7 @@ export default function Contact() {
         position: 'absolute', bottom: '-5rem', right: '-2rem',
         fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 800,
         fontSize: 'clamp(8rem, 24vw, 22rem)',
-        color: 'rgba(255,255,255,0.018)',
+        color: 'rgba(var(--border-rgb),0.018)',
         lineHeight: 1, letterSpacing: '-0.05em',
         userSelect: 'none', pointerEvents: 'none', whiteSpace: 'nowrap',
       }}>TALK</div>
@@ -40,7 +40,7 @@ export default function Contact() {
       <div style={{
         position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)',
         width: '50vw', height: '30vw',
-        background: 'radial-gradient(ellipse, rgba(255,69,0,0.06) 0%, transparent 70%)',
+        background: 'radial-gradient(ellipse, rgba(var(--accent-rgb),0.06) 0%, transparent 70%)',
         pointerEvents: 'none',
       }} />
 
@@ -48,7 +48,7 @@ export default function Contact() {
         <div style={{
           position: 'absolute', top: 0, right: 0,
           fontFamily: "'DM Mono', monospace", fontSize: '0.62rem',
-          color: 'rgba(255,255,255,0.05)', letterSpacing: '0.14em', userSelect: 'none',
+          color: 'rgba(var(--border-rgb),0.05)', letterSpacing: '0.14em', userSelect: 'none',
         }}>04 / CONTACT</div>
 
         {/* Eyebrow */}
@@ -58,10 +58,10 @@ export default function Contact() {
           transition={{ duration: 0.5 }}
           style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '2rem' }}
         >
-          <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#30d158', boxShadow: '0 0 10px #30d158', display: 'inline-block' }} />
+          <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--green)', boxShadow: '0 0 10px var(--green)', display: 'inline-block' }} />
           <span style={{
             fontFamily: "'DM Mono', monospace", fontSize: '0.65rem',
-            color: '#30d158', letterSpacing: '0.14em', textTransform: 'uppercase',
+            color: 'var(--green)', letterSpacing: '0.14em', textTransform: 'uppercase',
           }}>Available now</span>
         </motion.div>
 
@@ -74,7 +74,7 @@ export default function Contact() {
             style={{
               fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 800,
               fontSize: 'clamp(3.2rem, 9.5vw, 9rem)',
-              letterSpacing: '-0.04em', lineHeight: 0.9, color: '#f5f5f7', margin: 0,
+              letterSpacing: '-0.04em', lineHeight: 0.9, color: 'var(--text)', margin: 0,
             }}
           >Got a project?</motion.h2>
         </div>
@@ -88,7 +88,7 @@ export default function Contact() {
               fontSize: 'clamp(3.2rem, 9.5vw, 9rem)',
               letterSpacing: '-0.04em', lineHeight: 0.9,
               color: 'transparent',
-              WebkitTextStroke: '1px rgba(245,245,247,0.18)',
+              WebkitTextStroke: '1px rgba(var(--text-rgb),0.18)',
               margin: 0,
             }}
           >Let's build it.</motion.h2>
@@ -105,7 +105,7 @@ export default function Contact() {
             style={{
               display: 'flex', alignItems: 'center', gap: 8,
               padding: '0.95rem 2.25rem',
-              background: '#ff4500', color: '#000',
+              background: 'var(--accent)', color: 'var(--bg)',
               fontFamily: "'Bricolage Grotesque', sans-serif",
               fontWeight: 700, fontSize: '1rem',
               textDecoration: 'none', letterSpacing: '-0.02em',
@@ -113,7 +113,7 @@ export default function Contact() {
             }}
             onMouseEnter={e => {
               e.currentTarget.style.transform = 'translateY(-3px)'
-              e.currentTarget.style.boxShadow = '0 20px 50px rgba(255,69,0,0.4)'
+              e.currentTarget.style.boxShadow = '0 20px 50px rgba(var(--accent-rgb),0.4)'
             }}
             onMouseLeave={e => {
               e.currentTarget.style.transform = ''
@@ -124,34 +124,32 @@ export default function Contact() {
           </a>
 
           <button onClick={copy}
+            className="glass glass-interactive glass-rim"
             style={{
               display: 'flex', alignItems: 'center', gap: 8,
               padding: '0.95rem 1.75rem',
-              background: 'rgba(255,255,255,0.04)',
-              border: `1px solid ${copied ? 'rgba(48,209,88,0.35)' : 'rgba(255,255,255,0.1)'}`,
-              color: copied ? '#30d158' : 'rgba(245,245,247,0.45)',
+              ['--glass-radius' as string]: '12px',
+              ['--glass-blur' as string]: '12px',
+              border: copied ? '1px solid rgba(var(--green-rgb),0.45)' : undefined,
+              color: copied ? 'var(--green)' : 'rgba(var(--text-rgb),0.7)',
               fontFamily: "'DM Mono', monospace", fontSize: '0.78rem',
-              letterSpacing: '0.03em', transition: 'all 0.2s ease',
-              cursor: 'pointer',
+              letterSpacing: '0.03em',
             }}
-            onMouseEnter={e => { if (!copied) { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.22)'; e.currentTarget.style.color = '#f5f5f7' } }}
-            onMouseLeave={e => { if (!copied) { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'rgba(245,245,247,0.45)' } }}
           >
             {copied ? '✓ Copied!' : 'yadavhrushikesh21@gmail.com'}
           </button>
 
           <a href="tel:+919054573621"
+            className="glass glass-interactive glass-rim"
             style={{
               display: 'flex', alignItems: 'center', gap: 7,
               padding: '0.95rem 1.5rem',
-              background: 'rgba(255,255,255,0.04)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              color: 'rgba(245,245,247,0.45)',
+              ['--glass-radius' as string]: '12px',
+              ['--glass-blur' as string]: '12px',
+              color: 'rgba(var(--text-rgb),0.7)',
               fontFamily: "'DM Mono', monospace", fontSize: '0.78rem',
-              letterSpacing: '0.03em', transition: 'all 0.2s ease', textDecoration: 'none',
+              letterSpacing: '0.03em', textDecoration: 'none',
             }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.22)'; e.currentTarget.style.color = '#f5f5f7' }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'rgba(245,245,247,0.45)' }}
           >
             <Phone size={13} /> +91 9054573621
           </a>
@@ -159,25 +157,17 @@ export default function Contact() {
           <div style={{ display: 'flex', gap: '0.5rem' }}>
             {socials.map(({ label, href, Icon }) => (
               <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
+                className="glass glass-interactive glass-rim"
                 style={{
                   width: 48, height: 48,
-                  border: '1px solid rgba(255,255,255,0.09)',
+                  ['--glass-radius' as string]: '12px',
+                  ['--glass-blur' as string]: '12px',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: 'rgba(245,245,247,0.3)',
+                  color: 'rgba(var(--text-rgb),0.5)',
                   textDecoration: 'none',
-                  transition: 'all 0.2s ease',
-                  background: 'rgba(255,255,255,0.03)',
                 }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = 'rgba(255,69,0,0.4)'
-                  e.currentTarget.style.color = '#ff4500'
-                  e.currentTarget.style.background = 'rgba(255,69,0,0.06)'
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.09)'
-                  e.currentTarget.style.color = 'rgba(245,245,247,0.3)'
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.03)'
-                }}
+                onMouseEnter={e => { e.currentTarget.style.color = 'var(--accent)' }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'rgba(var(--text-rgb),0.5)' }}
               >
                 <Icon size={16} />
               </a>
@@ -192,7 +182,7 @@ export default function Contact() {
           style={{
             marginTop: '3.5rem',
             fontFamily: "'DM Mono', monospace", fontSize: '0.65rem',
-            color: 'rgba(245,245,247,0.16)', letterSpacing: '0.1em',
+            color: 'rgba(var(--text-rgb),0.16)', letterSpacing: '0.1em',
             textTransform: 'uppercase',
           }}
         >

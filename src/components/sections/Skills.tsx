@@ -1,136 +1,95 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 
-const CATEGORIES = [
-  {
-    label: 'Frontend',
-    color: '#ff4500',
-    blurb: 'Interfaces that feel instant.',
-    items: ['React.js', 'Next.js (App Router)', 'TypeScript', 'JavaScript (ES6+)', 'Ant Design', 'HTML5', 'CSS3'],
-  },
-  {
-    label: 'APIs',
-    color: '#00b4d8',
-    blurb: 'The contract between client and server.',
-    items: ['GraphQL', 'Apollo Client', 'REST APIs'],
-  },
-  {
-    label: 'Backend',
-    color: '#f59e0b',
-    blurb: 'Logic that holds up under load.',
-    items: ['Node.js', 'Express.js'],
-  },
-  {
-    label: 'Integrations',
-    color: '#a855f7',
-    blurb: 'Wiring products into the world.',
-    items: ['Firebase', 'MSG91', 'OneSignal', 'HubSpot', 'Amplitude', 'GitHub / GitLab / Bitbucket APIs'],
-  },
-  {
-    label: 'Databases',
-    color: '#10b981',
-    blurb: 'Where the data actually lives.',
-    items: ['PostgreSQL', 'MongoDB', 'MySQL', 'Firestore'],
-  },
-  {
-    label: 'Tools & Platforms',
-    color: '#38bdf8',
-    blurb: 'Ship, host, repeat.',
-    items: ['Git', 'Vercel', 'Firebase Hosting'],
-  },
+/**
+ * The stack as a working manifest, not a card grid.
+ * `core` = the tools reached for daily (set large + bright).
+ * `rest` = also fluent, shipped in production (a dim monospace spec line).
+ * Type weight encodes proficiency — that's the whole idea of the section.
+ */
+const STACK = [
+  { label: 'Frontend',     core: ['React', 'Next.js', 'TypeScript'], rest: ['JavaScript (ES6+)', 'Ant Design', 'HTML5', 'CSS3'] },
+  { label: 'APIs',         core: ['GraphQL', 'Apollo Client'],       rest: ['REST'] },
+  { label: 'Backend',      core: ['Node.js'],                        rest: ['Express.js'] },
+  { label: 'Databases',    core: ['PostgreSQL', 'MongoDB'],          rest: ['MySQL', 'Firestore'] },
+  { label: 'Integrations', core: ['Firebase'],                       rest: ['MSG91', 'OneSignal', 'HubSpot', 'Amplitude', 'Git / GitLab / Bitbucket APIs'] },
+  { label: 'Platforms',    core: ['Git', 'Vercel'],                  rest: ['Firebase Hosting'] },
 ]
 
-function Card({ cat, i, inView }: { cat: (typeof CATEGORIES)[0]; i: number; inView: boolean }) {
+function Row({ row, i, inView }: { row: (typeof STACK)[0]; i: number; inView: boolean }) {
+  const [hover, setHover] = useState(false)
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 22 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ delay: i * 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ delay: i * 0.08, duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
       style={{
-        position: 'relative', overflow: 'hidden',
-        background: 'rgba(255,255,255,0.018)',
-        border: '1px solid rgba(255,255,255,0.07)',
-        padding: 'clamp(1.5rem, 3vw, 2.25rem)',
-        transition: 'border-color 0.3s ease, transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s ease',
-      }}
-      onMouseEnter={e => {
-        e.currentTarget.style.borderColor = `${cat.color}55`
-        e.currentTarget.style.transform = 'translateY(-4px)'
-        e.currentTarget.style.boxShadow = `0 18px 50px ${cat.color}14`
-      }}
-      onMouseLeave={e => {
-        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'
-        e.currentTarget.style.transform = ''
-        e.currentTarget.style.boxShadow = ''
+        position: 'relative',
+        borderTop: '1px solid rgba(var(--border-rgb),0.09)',
+        padding: 'clamp(1.6rem,3.2vw,2.5rem) 0',
+        overflow: 'hidden',
       }}
     >
-      {/* Top accent line */}
+      {/* hover wash — the same left-to-right tint the Work index uses */}
       <div style={{
-        position: 'absolute', top: 0, left: 0, right: 0, height: 2,
-        background: `linear-gradient(90deg, ${cat.color}, transparent)`,
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        background: 'linear-gradient(90deg, rgba(var(--accent-rgb),0.05), transparent 55%)',
+        opacity: hover ? 1 : 0, transition: 'opacity 0.4s ease',
       }} />
 
-      {/* Corner glow */}
-      <div style={{
-        position: 'absolute', top: -40, right: -40, width: 160, height: 160,
-        background: `radial-gradient(circle, ${cat.color}1a, transparent 70%)`,
-        pointerEvents: 'none',
-      }} />
-
-      {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+      <div
+        className="stack-row"
+        style={{
+          position: 'relative',
+          display: 'grid', gridTemplateColumns: '1fr', gap: '0.9rem 3rem',
+          alignItems: 'baseline',
+          transform: hover ? 'translateX(8px)' : 'translateX(0)',
+          transition: 'transform 0.45s cubic-bezier(0.16,1,0.3,1)',
+        }}
+      >
+        {/* discipline */}
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 14 }}>
           <span style={{
-            width: 9, height: 9, borderRadius: '50%', background: cat.color,
-            boxShadow: `0 0 12px ${cat.color}`, flexShrink: 0,
-          }} />
+            fontFamily: "'DM Mono', monospace", fontSize: '0.7rem',
+            color: hover ? 'var(--accent)' : 'rgba(var(--text-rgb),0.28)',
+            letterSpacing: '0.04em', transition: 'color 0.3s', flexShrink: 0,
+          }}>{String(i + 1).padStart(2, '0')}</span>
           <h3 style={{
             fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 800,
-            fontSize: 'clamp(1.3rem, 2.5vw, 1.7rem)', letterSpacing: '-0.03em',
-            color: '#f5f5f7', margin: 0,
-          }}>{cat.label}</h3>
+            fontSize: 'clamp(1.5rem,3.5vw,2.4rem)', letterSpacing: '-0.04em',
+            color: hover ? 'var(--accent)' : 'var(--text)', lineHeight: 1, margin: 0,
+            transition: 'color 0.3s',
+          }}>{row.label}</h3>
         </div>
-        <span style={{
-          fontFamily: "'DM Mono', monospace", fontSize: '0.62rem',
-          color: 'rgba(245,245,247,0.25)', letterSpacing: '0.06em',
-        }}>{String(cat.items.length).padStart(2, '0')}</span>
-      </div>
 
-      {/* Blurb */}
-      <p style={{
-        fontFamily: "'Bricolage Grotesque', sans-serif",
-        fontSize: '0.85rem', color: 'rgba(245,245,247,0.4)',
-        margin: '0 0 1.5rem', letterSpacing: '-0.01em',
-      }}>{cat.blurb}</p>
-
-      {/* Skill pills */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem' }}>
-        {cat.items.map((item, ii) => (
-          <motion.span
-            key={item}
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={inView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ delay: i * 0.1 + 0.15 + ii * 0.04, duration: 0.35 }}
-            style={{
-              fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 500,
-              fontSize: '0.82rem', color: 'rgba(245,245,247,0.62)',
-              background: 'rgba(255,255,255,0.03)',
-              border: '1px solid rgba(255,255,255,0.08)',
-              padding: '0.4rem 0.8rem', borderRadius: 100,
-              cursor: 'default', transition: 'all 0.2s ease',
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.color = '#fff'
-              e.currentTarget.style.borderColor = `${cat.color}aa`
-              e.currentTarget.style.background = `${cat.color}1f`
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.color = 'rgba(245,245,247,0.62)'
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'
-              e.currentTarget.style.background = 'rgba(255,255,255,0.03)'
-            }}
-          >{item}</motion.span>
-        ))}
+        {/* tools — core large + bright, supporting a dim mono spec line */}
+        <div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', columnGap: 'clamp(1rem,2.2vw,1.75rem)', rowGap: '0.4rem' }}>
+            {row.core.map((t) => (
+              <span key={t} style={{
+                fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 600,
+                fontSize: 'clamp(1.1rem,2vw,1.5rem)', letterSpacing: '-0.025em',
+                color: 'rgba(var(--text-rgb),0.95)', lineHeight: 1.15,
+              }}>{t}</span>
+            ))}
+          </div>
+          {row.rest.length > 0 && (
+            <div style={{ marginTop: '0.85rem', display: 'flex', flexWrap: 'wrap', alignItems: 'baseline' }}>
+              {row.rest.map((t, ti) => (
+                <span key={t} style={{
+                  fontFamily: "'DM Mono', monospace", fontSize: '0.72rem',
+                  color: 'rgba(var(--text-rgb),0.42)', letterSpacing: '0.02em', lineHeight: 1.5,
+                }}>
+                  {ti > 0 && <span style={{ color: 'rgba(var(--accent-rgb),0.4)', margin: '0 0.6rem' }}>·</span>}
+                  {t}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </motion.div>
   )
@@ -143,65 +102,59 @@ export default function Skills() {
   return (
     <section id="stack" ref={ref} style={{
       padding: 'clamp(7rem, 14vw, 12rem) clamp(1.5rem,5vw,4rem)',
-      background: '#0c0c0d',
+      background: 'rgba(var(--bg-rgb), 0.66)',
       position: 'relative', overflow: 'hidden',
-      borderTop: '1px solid rgba(255,255,255,0.06)',
+      borderTop: '1px solid rgba(var(--border-rgb),0.06)',
     }}>
       <div style={{
         position: 'absolute', top: '3rem', right: '1.5rem',
         fontFamily: "'DM Mono', monospace", fontSize: '0.62rem',
-        color: 'rgba(255,255,255,0.05)', letterSpacing: '0.14em', userSelect: 'none',
+        color: 'rgba(var(--border-rgb),0.05)', letterSpacing: '0.14em', userSelect: 'none',
       }}>03 / STACK</div>
 
-      <div style={{ maxWidth: 1280, margin: '0 auto', position: 'relative' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto', position: 'relative' }}>
 
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          style={{ marginBottom: 'clamp(3rem, 6vw, 4.5rem)', maxWidth: 720 }}
+          style={{ marginBottom: 'clamp(2.5rem, 5vw, 3.5rem)', maxWidth: 760 }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '1.25rem' }}>
-            <span style={{ width: 28, height: '1.5px', background: '#ff4500', display: 'inline-block' }} />
+            <span style={{ width: 28, height: '1.5px', background: 'var(--accent)', display: 'inline-block' }} />
             <span style={{
               fontFamily: "'DM Mono', monospace", fontSize: '0.62rem',
-              color: '#ff4500', letterSpacing: '0.14em', textTransform: 'uppercase',
+              color: 'var(--accent)', letterSpacing: '0.14em', textTransform: 'uppercase',
             }}>Tech Stack</span>
           </div>
           <h2 style={{
             fontFamily: "'Bricolage Grotesque', sans-serif",
             fontWeight: 800, fontSize: 'clamp(2.4rem, 5.5vw, 4.5rem)',
-            letterSpacing: '-0.04em', color: '#f5f5f7', lineHeight: 1, margin: 0,
-          }}>What I work with</h2>
+            letterSpacing: '-0.04em', color: 'var(--text)', lineHeight: 1, margin: 0,
+          }}>The working set.</h2>
           <p style={{
             fontFamily: "'Bricolage Grotesque', sans-serif",
             fontSize: 'clamp(0.95rem, 1.5vw, 1.1rem)',
-            color: 'rgba(245,245,247,0.4)', marginTop: '1.25rem',
-            maxWidth: 520, lineHeight: 1.7, letterSpacing: '-0.01em',
+            color: 'rgba(var(--text-rgb),0.4)', marginTop: '1.25rem',
+            maxWidth: 560, lineHeight: 1.7, letterSpacing: '-0.01em',
           }}>
-            Five years of deliberate choices — not a checklist, but the tools I
-            reach for and trust in production.
+            Sized by use, not by logo count. The bold names are what I reach for
+            daily — the line beneath each is fluent and shipped to production.
           </p>
         </motion.div>
 
-        {/* Card grid */}
-        <div style={{
-          display: 'grid', gridTemplateColumns: '1fr',
-          gap: 'clamp(0.85rem, 1.5vw, 1.25rem)',
-        }} className="stack-grid">
-          {CATEGORIES.map((cat, i) => (
-            <Card key={cat.label} cat={cat} i={i} inView={inView} />
+        {/* Ledger */}
+        <div style={{ borderBottom: '1px solid rgba(var(--border-rgb),0.09)' }}>
+          {STACK.map((row, i) => (
+            <Row key={row.label} row={row} i={i} inView={inView} />
           ))}
         </div>
       </div>
 
       <style>{`
-        @media (min-width: 700px) {
-          .stack-grid { grid-template-columns: 1fr 1fr !important; }
-        }
-        @media (min-width: 1040px) {
-          .stack-grid { grid-template-columns: repeat(3, 1fr) !important; }
+        @media (min-width: 820px) {
+          .stack-row { grid-template-columns: 0.62fr 1.38fr !important; }
         }
       `}</style>
     </section>
