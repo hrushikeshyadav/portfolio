@@ -58,8 +58,6 @@ export default function Cursor() {
         dotRef.current?.classList.remove('cur-hover')
         ringRef.current?.classList.remove('cur-hover')
       }
-      // fully hide the cursor over skip zones so nothing overlays the glass
-      if (skip) hide()
     }
 
     const onDown = () => {
