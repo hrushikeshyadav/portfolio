@@ -168,6 +168,7 @@ export default function FloatingTabBar() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
       className="glass glass-rim"
+      data-cursor-skip
       style={{
         pointerEvents: 'auto',
         ['--glass-radius' as string]: '999px',

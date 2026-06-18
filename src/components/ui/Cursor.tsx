@@ -47,7 +47,10 @@ export default function Cursor() {
       show()
 
       const target = e.target as HTMLElement
-      const interactive = !!target.closest('a') || !!target.closest('button')
+      // zones that opt out of the custom cursor effect (e.g. the glass tab bar,
+      // where the enlarged accent ring would mask the liquid-glass lens)
+      const skip = !!target.closest('[data-cursor-skip]')
+      const interactive = !skip && (!!target.closest('a') || !!target.closest('button'))
       if (interactive) {
         dotRef.current?.classList.add('cur-hover')
         ringRef.current?.classList.add('cur-hover')
@@ -55,6 +58,8 @@ export default function Cursor() {
         dotRef.current?.classList.remove('cur-hover')
         ringRef.current?.classList.remove('cur-hover')
       }
+      // fully hide the cursor over skip zones so nothing overlays the glass
+      if (skip) hide()
     }
 
     const onDown = () => {
