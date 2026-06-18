@@ -1,8 +1,11 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, Suspense, lazy } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowDownRight, ArrowUpRight } from 'lucide-react'
 import Magnetic from '../ui/Magnetic'
-import HeroScene from '../3d/HeroScene'
+import ScrambleText from '../ui/ScrambleText'
+
+// defer the hero WebGL centrepiece so the name decodes instantly on first paint
+const HeroScene = lazy(() => import('../3d/HeroScene'))
 
 const ROLES = ['Full Stack Engineer', 'GraphQL Architect', 'React Specialist', 'AI Builder']
 
@@ -63,7 +66,9 @@ export default function Hero() {
 
       {/* 3D centerpiece — backdrop on mobile, upper-right on desktop (.hero-3d) */}
       <div className="hero-3d">
-        <HeroScene />
+        <Suspense fallback={null}>
+          <HeroScene />
+        </Suspense>
         {/* readability vignette toward the text side */}
         <div style={{
           position: 'absolute', inset: 0, pointerEvents: 'none',
@@ -108,7 +113,7 @@ export default function Hero() {
                   lineHeight: 0.85,
                   whiteSpace: 'nowrap',
                 }}
-              >Hrushikesh</motion.div>
+              ><ScrambleText text="Hrushikesh" start={mounted} delay={350} speed={1.35} /></motion.div>
             )}
           </div>
 
@@ -128,7 +133,7 @@ export default function Hero() {
                   color: 'transparent',
                   whiteSpace: 'nowrap',
                 }}
-              >Yadav.</motion.div>
+              ><ScrambleText text="Yadav." start={mounted} delay={900} speed={1.15} /></motion.div>
             )}
           </div>
 

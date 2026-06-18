@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { experience, education } from '../../data/resume'
+import AnimatedHeading from '../ui/AnimatedHeading'
 
 export default function Experience() {
   const ref = useRef(null)
@@ -33,11 +34,14 @@ export default function Experience() {
               Career
             </span>
           </div>
-          <h2 style={{
-            fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 800,
-            fontSize: 'clamp(2.4rem,5.5vw,4.5rem)', letterSpacing: '-0.04em',
-            color: 'var(--text)', lineHeight: 1, margin: 0,
-          }}>Experience &amp; Education</h2>
+          <AnimatedHeading
+            text="Experience & Education"
+            style={{
+              fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 800,
+              fontSize: 'clamp(2.4rem,5.5vw,4.5rem)', letterSpacing: '-0.04em',
+              color: 'var(--text)', lineHeight: 1, margin: 0,
+            }}
+          />
         </motion.div>
 
         {/* Timeline */}

@@ -1,6 +1,4 @@
 import { ArrowUp } from 'lucide-react'
-import { GithubIcon, LinkedinIcon } from '../ui/Icons'
-import { Mail } from 'lucide-react'
 
 export default function Footer() {
   return (
@@ -30,44 +28,22 @@ export default function Footer() {
           </span>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          {[
-            { href: 'https://github.com/hrushikeshyadav', Icon: GithubIcon, label: 'GitHub' },
-            { href: 'https://www.linkedin.com/in/hrushikesh-yadav-0a16b3123', Icon: LinkedinIcon, label: 'LinkedIn' },
-            { href: 'mailto:yadavhrushikesh21@gmail.com', Icon: Mail, label: 'Email' },
-          ].map(({ href, Icon, label }) => (
-            <a key={label} href={href}
-              target={label !== 'Email' ? '_blank' : undefined}
-              rel="noopener noreferrer" aria-label={label}
-              style={{
-                color: 'rgba(var(--text-rgb),0.2)',
-                display: 'flex', textDecoration: 'none',
-                transition: 'color 0.2s',
-              }}
-              onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent)')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(var(--text-rgb),0.2)')}
-            >
-              <Icon size={15} />
-            </a>
-          ))}
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="glass glass-interactive glass-rim"
-            style={{
-              ['--glass-radius' as string]: '10px',
-              ['--glass-blur' as string]: '8px',
-              color: 'rgba(var(--text-rgb),0.35)',
-              padding: '0.45rem', display: 'flex',
-              alignItems: 'center', justifyContent: 'center',
-              marginLeft: 4,
-            }}
-            onMouseEnter={e => { e.currentTarget.style.color = 'var(--accent)' }}
-            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(var(--text-rgb),0.35)' }}
-            aria-label="Back to top"
-          >
-            <ArrowUp size={13} />
-          </button>
-        </div>
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="glass glass-interactive glass-rim"
+          style={{
+            ['--glass-radius' as string]: '10px',
+            ['--glass-blur' as string]: '8px',
+            color: 'rgba(var(--text-rgb),0.35)',
+            padding: '0.45rem', display: 'flex',
+            alignItems: 'center', justifyContent: 'center',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.color = 'var(--accent)' }}
+          onMouseLeave={e => { e.currentTarget.style.color = 'rgba(var(--text-rgb),0.35)' }}
+          aria-label="Back to top"
+        >
+          <ArrowUp size={13} />
+        </button>
       </div>
     </footer>
   )

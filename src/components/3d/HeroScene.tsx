@@ -168,6 +168,28 @@ function Halo({ count = 280 }: { count?: number }) {
   )
 }
 
+/** Two slim, tilted orbital rings sweeping the core — cheap geometry, big vibe. */
+function Rings() {
+  const a = useRef<THREE.Mesh>(null)
+  const b = useRef<THREE.Mesh>(null)
+  useFrame((_, dt) => {
+    if (a.current) { a.current.rotation.z += dt * 0.25; a.current.rotation.x = 1.2 }
+    if (b.current) { b.current.rotation.z -= dt * 0.18; b.current.rotation.x = 1.9; b.current.rotation.y = 0.6 }
+  })
+  return (
+    <group>
+      <mesh ref={a} scale={3.3}>
+        <torusGeometry args={[1, 0.006, 8, 120]} />
+        <meshBasicMaterial color="#7aa2ff" transparent opacity={0.5} blending={THREE.AdditiveBlending} />
+      </mesh>
+      <mesh ref={b} scale={3.9}>
+        <torusGeometry args={[1, 0.005, 8, 120]} />
+        <meshBasicMaterial color="#ff8fb4" transparent opacity={0.35} blending={THREE.AdditiveBlending} />
+      </mesh>
+    </group>
+  )
+}
+
 function Lights() {
   const p = useRef<THREE.PointLight>(null)
   useFrame((s) => {
@@ -211,6 +233,7 @@ export default function HeroScene() {
     >
       <Lights />
       <Core />
+      <Rings />
       <OrbitingTech />
       <Halo />
     </Canvas>

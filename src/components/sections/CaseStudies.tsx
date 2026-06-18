@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { motion, useInView, useScroll, useTransform } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import { caseStudies, type CaseStudy } from '../../data/caseStudies'
+import AnimatedHeading from '../ui/AnimatedHeading'
 
 function Chapter({ cs }: { cs: CaseStudy }) {
   const ref = useRef<HTMLDivElement>(null)
@@ -206,11 +207,14 @@ export default function CaseStudies() {
               Selected Work
             </span>
           </div>
-          <h2 style={{
-            fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 800,
-            fontSize: 'clamp(2.4rem,5.5vw,4.5rem)', letterSpacing: '-0.04em',
-            color: 'var(--text)', lineHeight: 1, margin: 0, maxWidth: 800,
-          }}>Four products. 4.5+ years. Built to last.</h2>
+          <AnimatedHeading
+            text="Four products. 4.5+ years. Built to last."
+            style={{
+              fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 800,
+              fontSize: 'clamp(2.4rem,5.5vw,4.5rem)', letterSpacing: '-0.04em',
+              color: 'var(--text)', lineHeight: 1, margin: 0, maxWidth: 800,
+            }}
+          />
         </motion.div>
 
         {caseStudies.map((cs) => <Chapter key={cs.id} cs={cs} />)}

@@ -7,7 +7,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          'three': ['three'],
+          'three': ['three', '@react-three/fiber', '@react-three/drei'],
           'react-vendor': ['react', 'react-dom'],
           'motion': ['framer-motion'],
         },

@@ -1,7 +1,10 @@
+import { lazy } from 'react'
 import { createRootRoute, createRoute, createRouter } from '@tanstack/react-router'
 import RootLayout from './routes/__root'
 import HomePage from './routes/index'
-import ResumePage from './routes/resume'
+
+// Resume pulls in @react-pdf — keep it out of the homepage bundle entirely.
+const ResumePage = lazy(() => import('./routes/resume'))
 
 const rootRoute = createRootRoute({
   component: RootLayout,

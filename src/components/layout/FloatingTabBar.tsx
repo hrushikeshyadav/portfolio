@@ -1,9 +1,30 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { motion } from 'framer-motion'
 import { LayoutGrid, User, Briefcase, Layers, Mail, FileText } from 'lucide-react'
 import { useNavigate, useRouterState } from '@tanstack/react-router'
+import { CURTAIN_COVER_MS } from '../ui/CurtainTransition'
 
 type Tab = { id: string; label: string; Icon: typeof LayoutGrid }
+
+// A softer, heavier spring so the lens visibly *glides* across the bar when you
+// jump from tab 1 → 4 (the "liquid glass sliding" feel) instead of snapping.
+const LENS_TRANSITION = { type: 'spring', stiffness: 230, damping: 26, mass: 1 } as const
+
+// Richer liquid-glass pill for the selected tab — frosted, accent-tinted, with a
+// specular top edge and an outer accent glow.
+const LENS_STYLE: CSSProperties = {
+  position: 'absolute',
+  inset: 0,
+  borderRadius: 999,
+  background:
+    'radial-gradient(120% 90% at 30% -10%, rgba(var(--glass-spec),0.5) 0%, transparent 50%), linear-gradient(160deg, rgba(var(--accent-rgb),0.30) 0%, rgba(var(--accent-rgb),0.14) 100%)',
+  WebkitBackdropFilter: 'blur(10px) saturate(170%)',
+  backdropFilter: 'blur(10px) saturate(170%)',
+  border: '1px solid rgba(var(--accent-rgb),0.42)',
+  boxShadow:
+    'inset 0 1px 0.5px 0 rgba(var(--glass-spec),0.65), inset 0 0 0 1px rgba(var(--accent-rgb),0.08), 0 4px 16px -2px rgba(var(--accent-rgb),0.4), 0 0 20px -3px rgba(var(--accent-rgb),0.5)',
+  zIndex: -1,
+}
 
 const TABS: Tab[] = [
   { id: 'about', label: 'About', Icon: User },
@@ -25,14 +46,21 @@ export default function FloatingTabBar() {
   const routerState = useRouterState()
   const isOnResume = routerState.location.pathname === '/resume'
 
+  // While a tab-triggered scroll is animating, the scroll-spy must NOT run —
+  // otherwise it walks the highlight through every section the page passes over
+  // (the "1 → 2 → 3 → 4" glitch). `lockUntil` holds the spy off until the
+  // programmatic scroll has settled.
+  const lockUntil = useRef(0)
+
   // scroll-spy: highlight whichever section's top is nearest the viewport top.
-  // (rootMargin band approaches were leaving the first section unselected.)
   useEffect(() => {
     if (isOnResume) return
     let raf = 0
     const onScroll = () => {
+      if (performance.now() < lockUntil.current) return
       cancelAnimationFrame(raf)
       raf = requestAnimationFrame(() => {
+        if (performance.now() < lockUntil.current) return
         const probe = 110 // a little below the top edge
         let current = TABS[0].id
         for (const t of TABS) {
@@ -53,15 +81,24 @@ export default function FloatingTabBar() {
   const getLenis = () =>
     (window as unknown as { lenis?: { scrollTo: (t: HTMLElement | number, o?: object) => void } }).lenis
 
-  const scrollToId = (id: string) => {
+  const scrollToId = (id: string, immediate = false) => {
     const el = document.getElementById(id)
     if (!el) return
     // element-based — lenis measures at animation time, so it lands on the
     // section's true top (offset clears the floating top controls).
     const lenis = getLenis()
-    if (lenis) lenis.scrollTo(el, { offset: -84, duration: 1.0 })
-    else el.scrollIntoView({ behavior: 'smooth' })
+    if (lenis) lenis.scrollTo(el, immediate ? { offset: -84, immediate: true } : { offset: -84, duration: 1.0 })
+    else el.scrollIntoView({ behavior: immediate ? 'auto' : 'smooth' })
   }
+
+  // each tab plays a visually distinct curtain on navigation
+  const VARIANTS: Record<string, string> = {
+    about: 'door', work: 'shutter', experience: 'blinds', stack: 'pixel', contact: 'stagger',
+  }
+  const prefersReduced = () =>
+    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const fireCurtain = (variant: string, label: string) =>
+    window.dispatchEvent(new CustomEvent('curtain', { detail: { variant, label } }))
 
   const scrollToTop = (immediate = false) => {
     const lenis = getLenis()
@@ -74,21 +111,42 @@ export default function FloatingTabBar() {
   const isFirstTab = (id: string) => id === TABS[0].id
 
   const goSection = (id: string) => {
+    // jump the highlight straight to the target and hold the scroll-spy off so it
+    // never steps through the sections we pass over (desktop + mobile).
     setActive(id)
-    const run = () => (isFirstTab(id) ? scrollToTop() : scrollToId(id))
-    if (isOnResume) {
-      navigate({ to: '/' }).then(() => setTimeout(run, 180))
-    } else {
-      run()
+    lockUntil.current = performance.now() + 1500
+    const label = TABS.find((t) => t.id === id)?.label ?? ''
+    const reduce = prefersReduced()
+
+    // with reduced motion, just smooth-scroll (no curtain). Otherwise drop the
+    // curtain and jump to the section instantly while it's covered, so the
+    // section "loads" hidden behind the sweep.
+    if (reduce) {
+      if (isOnResume) navigate({ to: '/' }).then(() => setTimeout(() => (isFirstTab(id) ? scrollToTop() : scrollToId(id)), 180))
+      else isFirstTab(id) ? scrollToTop() : scrollToId(id)
+      return
     }
+
+    const variant = VARIANTS[id] ?? 'door'
+    fireCurtain(variant, label)
+    const cover = CURTAIN_COVER_MS[variant] ?? 430
+    const jump = () => (isFirstTab(id) ? scrollToTop(true) : scrollToId(id, true))
+    if (isOnResume) navigate({ to: '/' }).then(() => setTimeout(jump, cover))
+    else setTimeout(jump, cover)
   }
 
   const goResume = () => {
-    if (isOnResume) {
-      scrollToTop(true)
-    } else {
-      navigate({ to: '/resume' }).then(() => setTimeout(() => scrollToTop(true), 60))
+    lockUntil.current = performance.now() + 1500
+    const reduce = prefersReduced()
+    if (reduce) {
+      if (isOnResume) scrollToTop(true)
+      else navigate({ to: '/resume' }).then(() => setTimeout(() => scrollToTop(true), 60))
+      return
     }
+    fireCurtain('iris', 'Resume')
+    const cover = CURTAIN_COVER_MS.iris ?? 430
+    if (isOnResume) setTimeout(() => scrollToTop(true), cover)
+    else navigate({ to: '/resume' }).then(() => setTimeout(() => scrollToTop(true), cover))
   }
 
   return (
@@ -146,19 +204,7 @@ export default function FloatingTabBar() {
             }}
           >
             {isActive && (
-              <motion.span
-                layoutId="tab-lens"
-                transition={{ type: 'spring', stiffness: 420, damping: 34 }}
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  borderRadius: 999,
-                  background: 'rgba(var(--accent-rgb), 0.14)',
-                  border: '1px solid rgba(var(--accent-rgb), 0.28)',
-                  boxShadow: 'inset 0 1px 0 0 rgba(var(--glass-spec), 0.5)',
-                  zIndex: -1,
-                }}
-              />
+              <motion.span layoutId="tab-lens" transition={LENS_TRANSITION} style={LENS_STYLE} />
             )}
             <Icon size={19} strokeWidth={isActive ? 2.4 : 2} />
             <span
@@ -201,19 +247,7 @@ export default function FloatingTabBar() {
         }}
       >
         {isOnResume && (
-          <motion.span
-            layoutId="tab-lens"
-            transition={{ type: 'spring', stiffness: 420, damping: 34 }}
-            style={{
-              position: 'absolute',
-              inset: 0,
-              borderRadius: 999,
-              background: 'rgba(var(--accent-rgb), 0.14)',
-              border: '1px solid rgba(var(--accent-rgb), 0.28)',
-              boxShadow: 'inset 0 1px 0 0 rgba(var(--glass-spec), 0.5)',
-              zIndex: -1,
-            }}
-          />
+          <motion.span layoutId="tab-lens" transition={LENS_TRANSITION} style={LENS_STYLE} />
         )}
         <FileText size={19} strokeWidth={isOnResume ? 2.4 : 2} />
         <span

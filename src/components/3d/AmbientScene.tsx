@@ -97,6 +97,22 @@ function Network() {
   // live working buffer of current node positions
   const cur = useMemo(() => new Float32Array(base.length), [base])
 
+  // Data packets: bright pulses that travel along the graph edges — the visual
+  // of packet routing / signal propagation. Replaces the old wireframe blobs.
+  const PACKETS = 30
+  const packets = useRef(
+    Array.from({ length: PACKETS }, () => ({
+      edge: Math.floor(Math.random() * Math.max(1, edges.length)),
+      t: Math.random(),
+      speed: 0.12 + Math.random() * 0.4,
+    }))
+  )
+  const packetGeo = useMemo(() => {
+    const g = new THREE.BufferGeometry()
+    g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(PACKETS * 3), 3))
+    return g
+  }, [])
+
   useFrame((state, dt) => {
     const t = state.clock.elapsedTime
     const p = scroll.p
@@ -123,6 +139,25 @@ function Network() {
       lineArr[o + 3] = cur[b * 3]; lineArr[o + 4] = cur[b * 3 + 1]; lineArr[o + 5] = cur[b * 3 + 2]
     }
     lineGeo.attributes.position.needsUpdate = true
+
+    // advance packets along their edges; recycle onto a new edge at the end
+    if (edges.length) {
+      const pArr = packetGeo.attributes.position.array as Float32Array
+      for (let i = 0; i < PACKETS; i++) {
+        const pk = packets.current[i]
+        pk.t += dt * pk.speed
+        if (pk.t > 1) {
+          pk.t -= 1
+          pk.edge = (Math.random() * edges.length) | 0
+        }
+        const [a, b] = edges[pk.edge]
+        const o = i * 3
+        pArr[o] = cur[a * 3] + (cur[b * 3] - cur[a * 3]) * pk.t
+        pArr[o + 1] = cur[a * 3 + 1] + (cur[b * 3 + 1] - cur[a * 3 + 1]) * pk.t
+        pArr[o + 2] = cur[a * 3 + 2] + (cur[b * 3 + 2] - cur[a * 3 + 2]) * pk.t
+      }
+      packetGeo.attributes.position.needsUpdate = true
+    }
 
     if (group.current) {
       // slow ambient spin + eased cursor parallax
@@ -155,37 +190,18 @@ function Network() {
           blending={blend}
         />
       </points>
-    </group>
-  )
-}
-
-function Polyhedra() {
-  const { accent, light } = useThemeColors()
-  const o = light ? 1.9 : 1 // boost faint wireframes on light bg
-  const a = useRef<THREE.Mesh>(null)
-  const b = useRef<THREE.Mesh>(null)
-  const c = useRef<THREE.Mesh>(null)
-
-  useFrame((_, dt) => {
-    if (a.current) { a.current.rotation.x += dt * 0.12; a.current.rotation.y += dt * 0.08 }
-    if (b.current) { b.current.rotation.y -= dt * 0.1; b.current.rotation.z += dt * 0.06 }
-    if (c.current) { c.current.rotation.x -= dt * 0.07; c.current.rotation.y += dt * 0.11 }
-  })
-
-  return (
-    <group>
-      <mesh ref={a} position={[-5.5, 2.5, -2]} scale={1.1}>
-        <icosahedronGeometry args={[1, 0]} />
-        <meshBasicMaterial color={accent} wireframe transparent opacity={0.14 * o} />
-      </mesh>
-      <mesh ref={b} position={[5.5, -2, -1]} scale={0.9}>
-        <octahedronGeometry args={[1, 0]} />
-        <meshBasicMaterial color={accent} wireframe transparent opacity={0.12 * o} />
-      </mesh>
-      <mesh ref={c} position={[4, 3, -3]} scale={0.6}>
-        <torusKnotGeometry args={[1, 0.32, 90, 12]} />
-        <meshBasicMaterial color={accent} wireframe transparent opacity={0.1 * o} />
-      </mesh>
+      {/* travelling data packets */}
+      <points geometry={packetGeo}>
+        <pointsMaterial
+          color={accent}
+          size={0.16}
+          transparent
+          opacity={light ? 0.9 : 0.95}
+          sizeAttenuation
+          depthWrite={false}
+          blending={blend}
+        />
+      </points>
     </group>
   )
 }
@@ -244,7 +260,6 @@ export default function AmbientScene() {
         style={{ background: 'transparent' }}
       >
         <Network />
-        <Polyhedra />
         <Rig />
       </Canvas>
     </div>
