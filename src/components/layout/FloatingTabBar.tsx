@@ -34,6 +34,18 @@ const TABS: Tab[] = [
   { id: 'contact', label: 'Contact', Icon: Mail },
 ]
 
+// Scroll-spy map, in DOM order: section id we probe → tab it lights. "more"
+// (Beyond the deep dives) sits right after the deep dives and is part of Work,
+// so it also lights the Work tab.
+const SPY: { el: string; tab: string }[] = [
+  { el: 'about', tab: 'about' },
+  { el: 'work', tab: 'work' },
+  { el: 'more', tab: 'work' },
+  { el: 'experience', tab: 'experience' },
+  { el: 'stack', tab: 'stack' },
+  { el: 'contact', tab: 'contact' },
+]
+
 /**
  * iOS-style floating glass tab bar (Instagram / Apple Music vibe). Fixed at the
  * bottom centre as a liquid-glass capsule; the active tab is marked by a soft
@@ -46,13 +58,23 @@ export default function FloatingTabBar() {
   const routerState = useRouterState()
   const isOnResume = routerState.location.pathname === '/resume'
 
+  // On phones the backdrop blur is weak/absent, so the glass capsule nearly
+  // disappears — use a more opaque fill there so the bar stays legible.
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 700px)')
+    const update = () => setIsMobile(mq.matches)
+    update()
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [])
+
   // While a tab-triggered scroll is animating, the scroll-spy must NOT run —
   // otherwise it walks the highlight through every section the page passes over
   // (the "1 → 2 → 3 → 4" glitch). `lockUntil` holds the spy off until the
   // programmatic scroll has settled.
   const lockUntil = useRef(0)
 
-  // scroll-spy: highlight whichever section's top is nearest the viewport top.
   useEffect(() => {
     if (isOnResume) return
     let raf = 0
@@ -63,9 +85,9 @@ export default function FloatingTabBar() {
         if (performance.now() < lockUntil.current) return
         const probe = 110 // a little below the top edge
         let current = TABS[0].id
-        for (const t of TABS) {
-          const el = document.getElementById(t.id)
-          if (el && el.getBoundingClientRect().top <= probe) current = t.id
+        for (const sp of SPY) {
+          const el = document.getElementById(sp.el)
+          if (el && el.getBoundingClientRect().top <= probe) current = sp.tab
         }
         setActive(current)
       })
@@ -93,7 +115,7 @@ export default function FloatingTabBar() {
 
   // each tab plays a visually distinct curtain on navigation
   const VARIANTS: Record<string, string> = {
-    about: 'door', work: 'shutter', experience: 'blinds', stack: 'pixel', contact: 'stagger',
+    about: 'door', work: 'shutter', experience: 'blinds', stack: 'split', contact: 'rise',
   }
   const prefersReduced = () =>
     typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -145,8 +167,12 @@ export default function FloatingTabBar() {
     }
     fireCurtain('iris', 'Resume')
     const cover = CURTAIN_COVER_MS.iris ?? 430
+    // Swap the route only once the curtain is fully opaque — otherwise the
+    // /resume page renders under a still-transparent curtain and flashes into
+    // view before it's covered (the jump-behind-the-curtain trick the section
+    // tabs already use).
     if (isOnResume) setTimeout(() => scrollToTop(true), cover)
-    else navigate({ to: '/resume' }).then(() => setTimeout(() => scrollToTop(true), cover))
+    else setTimeout(() => navigate({ to: '/resume' }).then(() => scrollToTop(true)), cover)
   }
 
   return (
@@ -173,7 +199,16 @@ export default function FloatingTabBar() {
         pointerEvents: 'auto',
         ['--glass-radius' as string]: '999px',
         ['--glass-blur' as string]: '24px',
-        ['--glass-fill' as string]: '0.16',
+        ['--glass-fill' as string]: isMobile ? '0.34' : '0.16',
+        // Phones don't blur the backdrop reliably, so the page bleeds through a
+        // translucent bar. Sit it on an opaque, theme-aware surface there (with
+        // a subtle tint sheen) so the tabs stay legible.
+        ...(isMobile
+          ? {
+              background:
+                'linear-gradient(160deg, rgba(var(--glass-tint),0.20) 0%, transparent 60%), var(--surface)',
+            }
+          : null),
         display: 'flex',
         alignItems: 'center',
         gap: 'clamp(0.15rem, 0.6vw, 0.35rem)',
@@ -200,7 +235,7 @@ export default function FloatingTabBar() {
               gap: 3,
               padding: 'clamp(0.42rem, 1vw, 0.6rem) clamp(0.55rem, 2vw, 0.95rem)',
               borderRadius: 999,
-              color: isActive ? 'var(--accent)' : 'rgba(var(--text-rgb), 0.55)',
+              color: isActive ? 'var(--accent)' : `rgba(var(--text-rgb), ${isMobile ? 0.85 : 0.55})`,
               transition: 'color 0.3s ease',
             }}
           >
@@ -243,12 +278,15 @@ export default function FloatingTabBar() {
           gap: 3,
           padding: 'clamp(0.45rem, 1vw, 0.6rem) clamp(0.55rem, 1.4vw, 0.95rem)',
           borderRadius: 999,
-          color: isOnResume ? 'var(--accent)' : 'rgba(var(--text-rgb), 0.55)',
+          color: isOnResume ? 'var(--accent)' : `rgba(var(--text-rgb), ${isMobile ? 0.85 : 0.55})`,
           transition: 'color 0.3s ease',
         }}
       >
+        {/* Distinct layoutId — the Resume tab is separated from the section
+            tabs by the divider, so its highlight must NOT slide across from
+            them (that shared morph rendered the lens twice / glitched). */}
         {isOnResume && (
-          <motion.span layoutId="tab-lens" transition={LENS_TRANSITION} style={LENS_STYLE} />
+          <motion.span layoutId="tab-lens-resume" transition={LENS_TRANSITION} style={LENS_STYLE} />
         )}
         <FileText size={19} strokeWidth={isOnResume ? 2.4 : 2} />
         <span

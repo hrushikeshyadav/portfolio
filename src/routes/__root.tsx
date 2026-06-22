@@ -5,6 +5,7 @@ import FloatingTabBar from '../components/layout/FloatingTabBar'
 import Footer from '../components/layout/Footer'
 import Cursor from '../components/ui/Cursor'
 import SmoothScroll from '../components/ui/SmoothScroll'
+import AuroraBackground from '../components/ui/AuroraBackground'
 import { GlassFilterDefs } from '../components/ui/LiquidGlass'
 import CurtainTransition from '../components/ui/CurtainTransition'
 
@@ -17,6 +18,9 @@ export default function RootLayout() {
     <div style={{ position: 'relative', minHeight: '100dvh' }}>
       <GlassFilterDefs />
       <CurtainTransition />
+      {/* Cheap animated aurora — runs in every tier (incl. phones). The WebGL
+          ambient scene layers on top of it on capable, non-touch devices. */}
+      <AuroraBackground />
       <Suspense fallback={null}>
         <AmbientScene />
       </Suspense>

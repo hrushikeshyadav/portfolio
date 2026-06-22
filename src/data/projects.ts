@@ -12,8 +12,8 @@ export interface Project {
   link?: string
 }
 
-// "More Work" — real, commit-evidenced projects beyond the four deep-dive
-// case studies (DigiQC, Undiffer, Eugenix, AI Agents).
+// "More Work" — real projects beyond the deep-dive case studies
+// (DigiQC, Zinq, Undiffer, Eugenix, AI Agents).
 export const projects: Project[] = [
   {
     id: 'digiqc-team',
@@ -48,7 +48,7 @@ export const projects: Project[] = [
     name: 'LW Hub',
     tagline: 'Internal Knowledge Platform',
     description:
-      'Logicwind’s internal hub — data-dense dashboards built with AG Grid, a markdown knowledge base, and team-scoped GraphQL permissions. 230+ commits authored.',
+      'Logicwind’s internal hub — data-dense dashboards built with AG Grid, a markdown knowledge base, and team-scoped GraphQL permissions.',
     tech: ['React', 'Apollo GraphQL', 'AG Grid', 'Ant Design', 'Sentry'],
     category: 'Internal Tool',
     year: '2023–2024',
@@ -70,17 +70,17 @@ export const projects: Project[] = [
     link: 'https://www.appsonair.com',
   },
   {
-    id: 'zinq',
+    id: 'zinq-website',
     number: '05',
-    name: 'Zinq',
-    tagline: 'AI Form & Agent Platform',
+    name: 'Zinq Website',
+    tagline: 'AI Agent Platform — Public Site',
     description:
-      'Contributed to Zinq, an AI-powered form builder and agent platform — the parent application that hosts the Eugenix submodule. Worked across the admin SPA and marketing site.',
-    tech: ['React', 'Next.js', 'Apollo GraphQL', 'Vercel AI SDK', 'Tailwind'],
-    category: 'AI Platform',
-    year: '2024–2025',
-    featured: false,
-    color: '#10b981',
+      'Primary engineer on Zinq’s public marketing site — a Next.js 14 App Router app with CMS-driven agent pages (headless WordPress over GraphQL), ISR / on-demand revalidation, WhatsApp deep-link routing for “Try Asking” prompts, and Paddle + PostHog. Deployed on Cloudflare Pages.',
+    tech: ['Next.js 14', 'TypeScript', 'Apollo GraphQL', 'Tailwind', 'Framer Motion', 'Paddle', 'PostHog', 'Cloudflare Pages'],
+    category: 'Marketing Site',
+    year: '2024–Present',
+    featured: true,
+    color: '#6366f1',
     link: 'https://zinq.ai',
   },
   {
@@ -100,10 +100,10 @@ export const projects: Project[] = [
     id: 'appeal-collector',
     number: '07',
     name: 'Appeal Collector',
-    tagline: 'Scheduled Scraping Job',
+    tagline: 'Income-Tax Appeal Tracker',
     description:
-      'A scheduled Node.js job that scrapes legal appeal records — bench, initiator and RSA-number data — from a government portal on an interval, with Sentry observability.',
-    tech: ['Node.js', 'Puppeteer', 'Sentry', 'Cron'],
+      'A scheduled Node.js job that scrapes Income Tax Appellate Tribunal (ITAT) records — appeal type, bench, initiator and RSA numbers — on an interval and posts digests to Google Chat, with Sentry observability.',
+    tech: ['Node.js', 'Puppeteer', 'Google Chat', 'Sentry', 'Cron'],
     category: 'Automation',
     year: '2023',
     featured: false,

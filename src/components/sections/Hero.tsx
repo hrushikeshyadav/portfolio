@@ -76,6 +76,9 @@ export default function Hero() {
         }} />
       </div>
 
+      {/* Mobile/tablet readability scrim behind the headline (see .hero-scrim) */}
+      <div className="hero-scrim" aria-hidden />
+
       <motion.div style={{ y, opacity, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative', zIndex: 2 }}>
         <div style={{ padding: 'clamp(5.5rem,12vw,9rem) clamp(1.25rem,5vw,4rem) 3rem', width: '100%', maxWidth: 1440, margin: '0 auto' }}>
 
@@ -129,7 +132,7 @@ export default function Hero() {
                   fontSize: 'clamp(3rem, 15.5vw, 15rem)',
                   letterSpacing: '-0.045em',
                   lineHeight: 0.85,
-                  WebkitTextStroke: 'clamp(1px, 0.1vw, 2px) rgba(var(--text-rgb),0.3)',
+                  WebkitTextStroke: 'clamp(1px, 0.1vw, 2px) rgba(var(--text-rgb),0.5)',
                   color: 'transparent',
                   whiteSpace: 'nowrap',
                 }}

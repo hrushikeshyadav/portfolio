@@ -49,7 +49,7 @@ export default function Contact() {
           position: 'absolute', top: 0, right: 0,
           fontFamily: "'DM Mono', monospace", fontSize: '0.62rem',
           color: 'rgba(var(--border-rgb),0.05)', letterSpacing: '0.14em', userSelect: 'none',
-        }}>04 / CONTACT</div>
+        }}>05 / CONTACT</div>
 
         {/* Eyebrow */}
         <motion.div

@@ -193,6 +193,12 @@ export default function CaseStudies() {
       position: 'relative',
       borderTop: '1px solid rgba(var(--border-rgb),0.06)',
     }}>
+      <div style={{
+        position: 'absolute', top: '3rem', right: 'clamp(1.5rem,5vw,4rem)',
+        fontFamily: "'DM Mono', monospace", fontSize: '0.62rem',
+        color: 'rgba(var(--border-rgb),0.06)', letterSpacing: '0.14em', userSelect: 'none',
+      }}>01 / WORK</div>
+
       <div style={{ maxWidth: 1280, margin: '0 auto' }}>
         {/* Header */}
         <motion.div

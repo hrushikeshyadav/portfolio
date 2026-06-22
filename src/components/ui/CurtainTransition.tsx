@@ -17,7 +17,7 @@ const BG = 'linear-gradient(135deg, var(--bg-2) 0%, var(--surface) 55%, var(--bg
 // section at this moment so the scroll is never seen. Kept in sync with the
 // animation timings below.
 export const CURTAIN_COVER_MS: Record<string, number> = {
-  door: 430, iris: 430, shutter: 700, blinds: 700, pixel: 740, stagger: 700,
+  door: 430, iris: 430, split: 430, rise: 430, shutter: 700, blinds: 700, pixel: 740, stagger: 700,
 }
 const CLEAR_MS = 1650
 
@@ -79,6 +79,28 @@ function Curtain({ variant, label }: { variant: string; label?: string }) {
       <motion.div
         initial={{ clipPath: shut }} animate={{ clipPath: [shut, open, open, shut] }} transition={SOLO}
         style={{ ...panel, inset: 0, WebkitClipPath: shut }}
+      />
+    )
+  } else if (variant === 'split') {
+    // top & bottom panels glide in to meet at the centre line, then part again
+    body = (
+      <>
+        <motion.div
+          initial={{ y: '-101%' }} animate={{ y: ['-101%', '0%', '0%', '-101%'] }} transition={SOLO}
+          style={{ ...panel, left: 0, right: 0, top: 0, height: '50.6%', borderBottom: '1px solid rgba(var(--accent-rgb),0.3)' }}
+        />
+        <motion.div
+          initial={{ y: '101%' }} animate={{ y: ['101%', '0%', '0%', '101%'] }} transition={SOLO}
+          style={{ ...panel, left: 0, right: 0, bottom: 0, height: '50.6%', borderTop: '1px solid rgba(var(--accent-rgb),0.3)' }}
+        />
+      </>
+    )
+  } else if (variant === 'rise') {
+    // a single sheet sweeps up to cover, holds, then keeps rising to reveal
+    body = (
+      <motion.div
+        initial={{ y: '101%' }} animate={{ y: ['101%', '0%', '0%', '-101%'] }} transition={SOLO}
+        style={{ ...panel, inset: 0, borderTop: '1px solid rgba(var(--accent-rgb),0.3)' }}
       />
     )
   } else if (variant === 'shutter') {

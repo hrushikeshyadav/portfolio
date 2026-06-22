@@ -377,6 +377,37 @@ body::after {
   .glass-interactive { transition: none; }
 }
 
+/* ============================================================
+   perf-lite — applied to <html> by src/lib/perf.ts on weaker
+   GPUs / battery laptops / when frames are being dropped.
+   backdrop-filter blur over the live WebGL layer is the single
+   biggest cost on this page, so we drop it (and the expensive
+   SVG refraction) and compensate with a slightly more opaque
+   fill so the glass surfaces stay legible without a backdrop.
+   ============================================================ */
+.perf-lite .glass {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  background:
+    radial-gradient(
+      140% 90% at 18% -12%,
+      rgba(var(--glass-spec), calc(var(--glass-spec-op) * 0.6)) 0%,
+      transparent 46%
+    ),
+    linear-gradient(
+      160deg,
+      rgba(var(--glass-tint), calc(var(--glass-fill) + 0.16)) 0%,
+      rgba(var(--glass-tint), calc(var(--glass-fill) + 0.12)) 46%,
+      rgba(var(--glass-tint), calc(var(--glass-fill) + 0.08)) 100%
+    );
+}
+.perf-lite .glass-refract {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+/* Kill the perpetual hover sheen sweep too — it forces extra repaints. */
+.perf-lite .glass-sheen:hover::before { animation: none; opacity: 0; }
+
 /* Small monospace tech chip (used on project cards) */
 .tech-tag {
   font-family: 'DM Mono', monospace;
@@ -411,7 +442,10 @@ footer { margin-bottom: calc(env(safe-area-inset-bottom, 0px) + 6rem); }
   transform: translateX(-50%);
   width: min(130vw, 600px);
   height: min(64vh, 600px);
-  opacity: 0.62;
+  /* On phones/tablets the orbiting core sits directly behind the name, so keep
+     it as a subtle backdrop — otherwise the bright sphere and the outlined
+     "Yadav." blend into each other. */
+  opacity: 0.32;
 }
 @media (min-width: 1024px) {
   .hero-3d {
@@ -423,6 +457,26 @@ footer { margin-bottom: calc(env(safe-area-inset-bottom, 0px) + 6rem); }
     height: min(85vh, 760px);
     opacity: 1;
   }
+}
+
+/* Readability scrim behind the hero text on phones/tablets — fades the page
+   background up where the name + bio sit so they read clearly over the 3D.
+   Theme-aware (darkens on dark, lightens on light) via --bg-rgb. Removed on
+   desktop, where the 3D is off to the side and doesn't overlap the text. */
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 95% 52% at 50% 36%,
+    rgba(var(--bg-rgb), 0.72) 0%,
+    rgba(var(--bg-rgb), 0.45) 45%,
+    transparent 72%
+  );
+}
+@media (min-width: 1024px) {
+  .hero-scrim { display: none; }
 }
 
 /* Theme-toggle knob */

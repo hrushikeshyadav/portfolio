@@ -18,7 +18,7 @@ export const personal = {
 }
 
 export const summary =
-  'Senior JavaScript Developer with 4.5+ years of experience building scalable web applications using React.js, Next.js, and TypeScript. Skilled in developing high-performance frontend systems, GraphQL APIs, and platform integrations. Experienced in implementing AI-assisted development workflows, custom developer agents, and Model Context Protocol (MCP) integrations to improve development productivity and streamline engineering processes.'
+  'Senior JavaScript Developer with 4.5+ years of experience building scalable web applications using React.js, Next.js, and TypeScript. Currently a core-team engineer on an AI agent platform, building real-time conversational chat runtimes (Mastra + Vercel AI SDK) and the public product website. Skilled in high-performance frontend systems, GraphQL APIs, and platform integrations, with hands-on experience in AI-assisted development workflows, custom developer agents, and Model Context Protocol (MCP) integrations.'
 
 export interface Experience {
   role: string
@@ -33,6 +33,8 @@ export const experience: Experience[] = [
     company: 'Logicwind',
     duration: 'Aug 2022 — Present',
     highlights: [
+      'Core-team engineer on Zinq, an AI agent platform running conversational agents across WhatsApp and the web — building the v2 re-architecture’s real-time agent chat runtime (Mastra + Vercel AI SDK on a Hono / Turborepo monorepo) with streaming responses, WhatsApp-style messaging, per-agent appearance/branding, and live operator handoff.',
+      'Primary engineer on Zinq’s public Next.js 14 website — CMS-driven agent pages (headless WordPress over GraphQL) with ISR / on-demand revalidation, WhatsApp deep-link routing, and Paddle + PostHog integrations, deployed on Cloudflare Pages.',
       'Led frontend development for DigiQC, a multi-tenant construction quality-control SaaS, using React.js and Apollo GraphQL — sustained across 5,700+ commits and 14 feature modules.',
       'Designed and developed AI-powered developer agents to automate development workflows, improving code generation, task execution, and overall development efficiency.',
       'Integrated Model Context Protocol (MCP) servers and automation tools to streamline engineering workflows, code analysis, and research processes.',
@@ -76,12 +78,13 @@ export interface SkillGroup {
 }
 
 export const skills: SkillGroup[] = [
-  { label: 'Frontend', items: ['React.js', 'Next.js (App Router)', 'TypeScript', 'JavaScript (ES6+)', 'Ant Design', 'HTML5', 'CSS3'] },
-  { label: 'Backend', items: ['Node.js', 'Express.js'] },
-  { label: 'APIs', items: ['GraphQL (Apollo Client)', 'REST APIs'] },
-  { label: 'Integrations', items: ['Firebase', 'MSG91', 'OneSignal', 'HubSpot', 'Amplitude', 'GitHub / GitLab / Bitbucket APIs'] },
+  { label: 'Frontend', items: ['React.js', 'Next.js (App Router)', 'TypeScript', 'JavaScript (ES6+)', 'Tailwind CSS', 'Framer Motion', 'Ant Design', 'HTML5', 'CSS3'] },
+  { label: 'Backend', items: ['Node.js', 'Express.js', 'Hono', 'Temporal', 'Drizzle ORM'] },
+  { label: 'AI & Agents', items: ['Vercel AI SDK', 'Mastra', 'Model Context Protocol (MCP)', 'Anthropic Claude', 'OpenAI', 'Conversational agents'] },
+  { label: 'APIs', items: ['GraphQL (Apollo Client)', 'REST APIs', 'WebSockets / streaming'] },
+  { label: 'Integrations', items: ['Headless WordPress', 'Paddle', 'PostHog', 'WhatsApp Cloud API', 'Firebase', 'MSG91', 'OneSignal', 'HubSpot', 'Amplitude', 'GitHub / GitLab / Bitbucket APIs'] },
   { label: 'Databases', items: ['PostgreSQL', 'MongoDB', 'MySQL', 'Firestore'] },
-  { label: 'Tools & Platforms', items: ['Git', 'Vercel', 'Firebase Hosting'] },
+  { label: 'Tools & Platforms', items: ['Git', 'Turborepo', 'pnpm', 'Docker', 'Cloudflare Pages', 'Vercel', 'Firebase Hosting'] },
 ]
 
 export const softSkills = [

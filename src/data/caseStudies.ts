@@ -17,7 +17,7 @@ export interface CaseStudy {
 export const caseStudies: CaseStudy[] = [
   {
     id: 'digiqc',
-    index: '01',
+    index: '00',
     name: 'DigiQC',
     kicker: 'The Platform I Own',
     category: 'Multi-App SaaS Platform',
@@ -44,6 +44,34 @@ export const caseStudies: CaseStudy[] = [
     link: { href: 'https://www.digiqc.com', label: 'digiqc.com' },
   },
   {
+    id: 'zinq',
+    index: '01',
+    name: 'Zinq',
+    kicker: 'Core Team on the AI Agent Platform',
+    category: 'Conversational AI · Agent Platform',
+    period: '2024 — Present',
+    accent: '#6366f1',
+    summary:
+      'Core-team engineer on Zinq — an AI agent platform that runs conversational agents across WhatsApp and the web. Building the v2 re-architecture’s real-time agent chat runtime and the public product site.',
+    highlights: [
+      'Core team — v2 re-architecture',
+      'Real-time streaming agent chat',
+      'WhatsApp-style messaging UX',
+      'Per-agent appearance & branding',
+      'Live operator handoff & identity',
+      'Mastra + Vercel AI SDK runtime',
+    ],
+    metrics: [
+      { value: 'Core team', label: 'v2 re-architecture' },
+      { value: 'WhatsApp + Web', label: 'Agent channels' },
+      { value: 'Real-time', label: 'Streaming chat UX' },
+    ],
+    tech: ['Hono', 'Mastra', 'Vercel AI SDK', 'Next.js', 'TypeScript', 'Temporal', 'Drizzle', 'Turborepo'],
+    detail:
+      'On the v2 backend (Mastra + Vercel AI SDK agent-runtime on a Hono / Turborepo monorepo) I build the agent chat surface — rAF-coalesced streaming, memoized Markdown rendering, throttled typing indicators, WhatsApp-style timestamps and day separators, multiline composer, and operator handoff. On the public Next.js site I own the agent pages — CMS-driven cards, ISR / on-demand revalidation, and WhatsApp deep-link routing for "Try Asking" prompts.',
+    link: { href: 'https://zinq.ai', label: 'zinq.ai' },
+  },
+  {
     id: 'undiffer',
     index: '02',
     name: 'Undiffer',
@@ -52,7 +80,7 @@ export const caseStudies: CaseStudy[] = [
     period: '2021 — 2022',
     accent: '#10b981',
     summary:
-      'A standup and developer-productivity platform that pulls real-time activity from GitHub, GitLab and Bitbucket into one feed — 640+ commits as a core engineer.',
+      'A standup and developer-productivity platform that pulls real-time activity from GitHub, GitLab and Bitbucket into one feed — built as a core engineer.',
     highlights: [
       'GitHub / GitLab / Bitbucket APIs',
       'Real-time dev activity feeds',
@@ -62,7 +90,7 @@ export const caseStudies: CaseStudy[] = [
       'Nivo charts & insights',
     ],
     metrics: [
-      { value: '644', label: 'Commits authored' },
+      { value: 'Core eng', label: 'On the team' },
       { value: '3', label: 'VC platforms unified' },
       { value: 'Real-time', label: 'Activity tracking' },
     ],
@@ -82,7 +110,7 @@ export const caseStudies: CaseStudy[] = [
     summary:
       'Built the clinic-management admin for Eugenix — one of India’s most renowned, celebrity-trusted hair-transplant brands — and embedded it into the Zinq platform as a Git submodule with its own repo, branches and CI.',
     highlights: [
-      'Primary author — 80+ commits',
+      'Primary engineer',
       'Embedded via Git submodule',
       'Reuses Zinq’s design system',
       'Patient management module',
@@ -90,7 +118,7 @@ export const caseStudies: CaseStudy[] = [
       'GraphQL Codegen types',
     ],
     metrics: [
-      { value: '80+', label: 'Commits authored' },
+      { value: 'Primary', label: 'Engineer' },
       { value: 'Submodule', label: 'Platform architecture' },
       { value: 'i18n', label: 'EN · HI' },
     ],

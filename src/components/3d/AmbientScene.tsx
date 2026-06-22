@@ -1,6 +1,7 @@
 import { useRef, useMemo, useState, useEffect } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
+import { isPerfLite, onSceneOff } from '../../lib/perf'
 
 /**
  * Site-wide ambient layer. A slowly drifting 3D node-network — the visual
@@ -220,13 +221,25 @@ function Rig() {
 
 export default function AmbientScene() {
   const [enabled, setEnabled] = useState(false)
+  // Pause the WebGL render loop entirely while the tab is hidden — no point
+  // burning the GPU on a scene nobody can see.
+  const [active, setActive] = useState(true)
 
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const small = window.innerWidth < 760
     const coarse = window.matchMedia('(pointer: coarse)').matches
-    if (reduce || small || coarse) return
+    // Weak GPUs get the CSS aurora fallback instead of a live WebGL layer.
+    if (reduce || small || coarse || isPerfLite()) return
     setEnabled(true)
+
+    // If the live FPS probe later flags this device as struggling, drop the
+    // scene mid-session — the glass blur loses its moving backdrop (and so gets
+    // cheap again), while the glass itself stays intact.
+    const offPerf = onSceneOff(() => setEnabled(false))
+
+    const onVisibility = () => setActive(!document.hidden)
+    document.addEventListener('visibilitychange', onVisibility)
 
     const onScroll = () => {
       const h = document.documentElement
@@ -241,6 +254,8 @@ export default function AmbientScene() {
     window.addEventListener('mousemove', onMouse, { passive: true })
     onScroll()
     return () => {
+      offPerf()
+      document.removeEventListener('visibilitychange', onVisibility)
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('mousemove', onMouse)
     }
@@ -254,9 +269,12 @@ export default function AmbientScene() {
       aria-hidden
     >
       <Canvas
+        frameloop={active ? 'always' : 'never'}
         camera={{ position: [0, 0, 12], fov: 50 }}
-        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-        dpr={[1, 1.75]}
+        // antialias off + a tighter DPR cap roughly halve the per-frame GPU
+        // cost of the full-screen canvas; the lines/points still read cleanly.
+        gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
+        dpr={[1, 1.5]}
         style={{ background: 'transparent' }}
       >
         <Network />

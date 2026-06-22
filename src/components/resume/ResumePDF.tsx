@@ -26,54 +26,60 @@ const INK = '#2d2d2d'
 const SUB = '#5a6b7a'
 const RULE = '#d7dee4'
 
+// Balanced for a single A4 page that fills it comfortably (ATS-friendly).
 const s = StyleSheet.create({
   page: { fontFamily: FONT, fontSize: 9, color: INK, backgroundColor: '#ffffff' },
 
   // Header band
-  header: { backgroundColor: NAVY, padding: '24pt 30pt 20pt' },
-  name: { fontFamily: BOLD, fontSize: 26, color: '#ffffff', letterSpacing: 4 },
-  role: { fontSize: 10.5, color: '#c7d2dc', letterSpacing: 3, marginTop: 5 },
+  header: { backgroundColor: NAVY, padding: '18pt 30pt 14pt' },
+  name: { fontFamily: BOLD, fontSize: 23, color: '#ffffff', letterSpacing: 3 },
+  role: { fontSize: 9.5, color: '#c7d2dc', letterSpacing: 2.5, marginTop: 4 },
 
   // Body two-column
   body: { flexDirection: 'row' },
-  main: { width: '62%', padding: '18pt 16pt 24pt 30pt' },
-  side: { width: '38%', padding: '18pt 26pt 24pt 18pt', borderLeft: `1pt solid ${RULE}` },
+  main: { width: '62%', padding: '14pt 16pt 16pt 30pt' },
+  side: { width: '38%', padding: '14pt 26pt 16pt 18pt', borderLeft: `1pt solid ${RULE}` },
 
   // Section heading
   h: { fontFamily: BOLD, fontSize: 11, color: NAVY_DK, letterSpacing: 1.5 },
-  hRule: { height: 2, backgroundColor: NAVY, width: 26, marginTop: 4, marginBottom: 9 },
-  sectionGap: { marginTop: 16 },
+  hRule: { height: 2, backgroundColor: NAVY, width: 26, marginTop: 4, marginBottom: 7 },
+  sectionGap: { marginTop: 11 },
 
-  summary: { fontSize: 9, color: INK, lineHeight: 1.55 },
+  summary: { fontSize: 8.8, color: INK, lineHeight: 1.45 },
 
   // Experience
-  expItem: { marginBottom: 11 },
-  expDuration: { fontSize: 8, color: SUB, marginBottom: 1.5 },
+  expItem: { marginBottom: 8 },
+  expHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 1 },
+  expTitle: { flexShrink: 1, paddingRight: 8 },
+  expDuration: { fontSize: 8, color: SUB, flexShrink: 0 },
   expRole: { fontFamily: BOLD, fontSize: 9.5, color: NAVY_DK },
+  expSep: { fontSize: 9, color: SUB },
   expCompany: { fontFamily: BOLD, fontSize: 9.5, color: NAVY },
-  bulletRow: { flexDirection: 'row', marginTop: 3, paddingRight: 4 },
+  bulletRow: { flexDirection: 'row', marginTop: 2.5, paddingRight: 4 },
   bulletDot: { width: 8, fontSize: 9, color: NAVY, marginTop: 0.5 },
-  bulletText: { flex: 1, fontSize: 8.5, color: INK, lineHeight: 1.45 },
+  bulletText: { flex: 1, fontSize: 8.4, color: INK, lineHeight: 1.4 },
 
   // Sidebar
-  contactRow: { flexDirection: 'row', marginBottom: 4, alignItems: 'flex-start' },
-  contactKey: { fontFamily: BOLD, fontSize: 8, color: NAVY, width: 46 },
-  contactVal: { flex: 1, fontSize: 8, color: INK },
-  contactLink: { flex: 1, fontSize: 8, color: '#1a5276', textDecoration: 'none' },
+  contactRow: { flexDirection: 'row', marginBottom: 3, alignItems: 'flex-start' },
+  contactKey: { fontFamily: BOLD, fontSize: 8.5, color: NAVY, width: 46 },
+  contactVal: { flex: 1, fontSize: 8.5, color: INK },
+  contactLink: { flex: 1, fontSize: 8.5, color: '#1a5276', textDecoration: 'none' },
 
-  skillGroup: { marginBottom: 7 },
+  skillGroup: { marginBottom: 5 },
   skillLabel: { fontFamily: BOLD, fontSize: 8.5, color: NAVY_DK, marginBottom: 2 },
-  skillItems: { fontSize: 8, color: INK, lineHeight: 1.4 },
+  skillItems: { fontSize: 8.3, color: INK, lineHeight: 1.35 },
 
-  liRow: { flexDirection: 'row', marginBottom: 2.5 },
-  liDot: { width: 7, fontSize: 8, color: NAVY },
-  liText: { flex: 1, fontSize: 8.5, color: INK, lineHeight: 1.35 },
+  // Inline comma list (soft skills, languages) — compact, ATS-readable
+  inlineList: { fontSize: 8.3, color: INK, lineHeight: 1.45 },
 
-  eduItem: { marginBottom: 7 },
+  eduItem: { marginBottom: 5.5 },
   eduDegree: { fontFamily: BOLD, fontSize: 8.5, color: NAVY_DK },
-  eduInst: { fontSize: 8, color: SUB, lineHeight: 1.35, marginTop: 1 },
-  eduYear: { fontSize: 8, color: NAVY, marginTop: 1 },
+  eduInst: { fontSize: 8.3, color: SUB, lineHeight: 1.35, marginTop: 1 },
+  eduYear: { fontSize: 8.3, color: NAVY, marginTop: 1 },
 })
+
+// Show every bullet — there's room for the full story on one page now.
+const MAX_BULLETS = 12
 
 function SideHeading({ children }: { children: string }) {
   return (
@@ -112,13 +118,15 @@ export default function ResumePDF() {
               <SideHeading>WORK EXPERIENCE</SideHeading>
               {experience.map((exp) => (
                 <View key={exp.role + exp.duration} style={s.expItem} wrap={false}>
-                  <Text style={s.expDuration}>{exp.duration}</Text>
-                  <Text>
-                    <Text style={s.expRole}>{exp.role}</Text>
-                    <Text style={s.expDuration}>{'  |  '}</Text>
-                    <Text style={s.expCompany}>{exp.company}</Text>
-                  </Text>
-                  {exp.highlights.map((h, i) => (
+                  <View style={s.expHead}>
+                    <Text style={s.expTitle}>
+                      <Text style={s.expRole}>{exp.role}</Text>
+                      <Text style={s.expSep}>{'  |  '}</Text>
+                      <Text style={s.expCompany}>{exp.company}</Text>
+                    </Text>
+                    <Text style={s.expDuration}>{exp.duration}</Text>
+                  </View>
+                  {exp.highlights.slice(0, MAX_BULLETS).map((h, i) => (
                     <View key={i} style={s.bulletRow}>
                       <Text style={s.bulletDot}>•</Text>
                       <Text style={s.bulletText}>{h}</Text>
@@ -165,12 +173,7 @@ export default function ResumePDF() {
 
             <View style={s.sectionGap}>
               <SideHeading>SOFT SKILLS</SideHeading>
-              {softSkills.map((sk) => (
-                <View key={sk} style={s.liRow}>
-                  <Text style={s.liDot}>•</Text>
-                  <Text style={s.liText}>{sk}</Text>
-                </View>
-              ))}
+              <Text style={s.inlineList}>{softSkills.join(' · ')}</Text>
             </View>
 
             <View style={s.sectionGap}>
@@ -186,12 +189,7 @@ export default function ResumePDF() {
 
             <View style={s.sectionGap}>
               <SideHeading>LANGUAGES</SideHeading>
-              {languages.map((l) => (
-                <View key={l} style={s.liRow}>
-                  <Text style={s.liDot}>•</Text>
-                  <Text style={s.liText}>{l}</Text>
-                </View>
-              ))}
+              <Text style={s.inlineList}>{languages.join(' · ')}</Text>
             </View>
           </View>
         </View>
