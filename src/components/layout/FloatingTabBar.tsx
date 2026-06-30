@@ -4,7 +4,7 @@ import { LayoutGrid, User, Briefcase, Layers, Mail, FileText } from 'lucide-reac
 import { useNavigate, useRouterState } from '@tanstack/react-router'
 import { CURTAIN_COVER_MS } from '../ui/CurtainTransition'
 
-type Tab = { id: string; label: string; Icon: typeof LayoutGrid }
+type Tab = { id: string; label: string; Icon: typeof LayoutGrid; route?: string }
 
 // A softer, heavier spring so the lens visibly *glides* across the bar when you
 // jump from tab 1 → 4 (the "liquid glass sliding" feel) instead of snapping.
@@ -31,19 +31,19 @@ const TABS: Tab[] = [
   { id: 'work', label: 'Work', Icon: LayoutGrid },
   { id: 'experience', label: 'Career', Icon: Briefcase },
   { id: 'stack', label: 'Stack', Icon: Layers },
-  { id: 'contact', label: 'Contact', Icon: Mail },
+  { id: 'contact', label: 'Contact', Icon: Mail, route: '/contact' },
 ]
 
 // Scroll-spy map, in DOM order: section id we probe → tab it lights. "more"
 // (Beyond the deep dives) sits right after the deep dives and is part of Work,
-// so it also lights the Work tab.
+// so it also lights the Work tab. Contact is now its own route (not a section),
+// so it isn't scroll-spied.
 const SPY: { el: string; tab: string }[] = [
   { el: 'about', tab: 'about' },
   { el: 'work', tab: 'work' },
   { el: 'more', tab: 'work' },
   { el: 'experience', tab: 'experience' },
   { el: 'stack', tab: 'stack' },
-  { el: 'contact', tab: 'contact' },
 ]
 
 /**
@@ -56,7 +56,10 @@ export default function FloatingTabBar() {
   const [active, setActive] = useState(TABS[0].id)
   const navigate = useNavigate()
   const routerState = useRouterState()
-  const isOnResume = routerState.location.pathname === '/resume'
+  const pathname = routerState.location.pathname
+  const isOnResume = pathname === '/resume'
+  const isOnContact = pathname === '/contact'
+  const offHome = isOnResume || isOnContact
 
   // On phones the backdrop blur is weak/absent, so the glass capsule nearly
   // disappears — use a more opaque fill there so the bar stays legible.
@@ -76,7 +79,7 @@ export default function FloatingTabBar() {
   const lockUntil = useRef(0)
 
   useEffect(() => {
-    if (isOnResume) return
+    if (offHome) return
     let raf = 0
     const onScroll = () => {
       if (performance.now() < lockUntil.current) return
@@ -98,7 +101,7 @@ export default function FloatingTabBar() {
       cancelAnimationFrame(raf)
       window.removeEventListener('scroll', onScroll)
     }
-  }, [isOnResume])
+  }, [offHome])
 
   const getLenis = () =>
     (window as unknown as { lenis?: { scrollTo: (t: HTMLElement | number, o?: object) => void } }).lenis
@@ -144,7 +147,7 @@ export default function FloatingTabBar() {
     // curtain and jump to the section instantly while it's covered, so the
     // section "loads" hidden behind the sweep.
     if (reduce) {
-      if (isOnResume) navigate({ to: '/' }).then(() => setTimeout(() => (isFirstTab(id) ? scrollToTop() : scrollToId(id)), 180))
+      if (offHome) navigate({ to: '/' }).then(() => setTimeout(() => (isFirstTab(id) ? scrollToTop() : scrollToId(id)), 180))
       else isFirstTab(id) ? scrollToTop() : scrollToId(id)
       return
     }
@@ -153,27 +156,29 @@ export default function FloatingTabBar() {
     fireCurtain(variant, label)
     const cover = CURTAIN_COVER_MS[variant] ?? 430
     const jump = () => (isFirstTab(id) ? scrollToTop(true) : scrollToId(id, true))
-    if (isOnResume) navigate({ to: '/' }).then(() => setTimeout(jump, cover))
+    if (offHome) navigate({ to: '/' }).then(() => setTimeout(jump, cover))
     else setTimeout(jump, cover)
   }
 
-  const goResume = () => {
+  // Route tabs (Resume, Contact) play their curtain, then swap the route only
+  // once it's fully opaque — so the new page renders hidden behind the sweep
+  // (same jump-behind-the-curtain trick the section tabs use).
+  const goRouteTab = (here: boolean, doNav: () => Promise<unknown>, variant: string, label: string) => {
     lockUntil.current = performance.now() + 1500
     const reduce = prefersReduced()
     if (reduce) {
-      if (isOnResume) scrollToTop(true)
-      else navigate({ to: '/resume' }).then(() => setTimeout(() => scrollToTop(true), 60))
+      if (here) scrollToTop(true)
+      else doNav().then(() => setTimeout(() => scrollToTop(true), 60))
       return
     }
-    fireCurtain('iris', 'Resume')
-    const cover = CURTAIN_COVER_MS.iris ?? 430
-    // Swap the route only once the curtain is fully opaque — otherwise the
-    // /resume page renders under a still-transparent curtain and flashes into
-    // view before it's covered (the jump-behind-the-curtain trick the section
-    // tabs already use).
-    if (isOnResume) setTimeout(() => scrollToTop(true), cover)
-    else setTimeout(() => navigate({ to: '/resume' }).then(() => scrollToTop(true)), cover)
+    fireCurtain(variant, label)
+    const cover = CURTAIN_COVER_MS[variant] ?? 430
+    if (here) setTimeout(() => scrollToTop(true), cover)
+    else setTimeout(() => doNav().then(() => scrollToTop(true)), cover)
   }
+
+  const goResume = () => goRouteTab(isOnResume, () => navigate({ to: '/resume' }), 'iris', 'Resume')
+  const goContact = () => goRouteTab(isOnContact, () => navigate({ to: '/contact' }), 'rise', 'Contact')
 
   return (
     <div
@@ -216,12 +221,12 @@ export default function FloatingTabBar() {
         maxWidth: '100%',
       }}
     >
-      {TABS.map(({ id, label, Icon }) => {
-        const isActive = !isOnResume && active === id
+      {TABS.map(({ id, label, Icon, route }) => {
+        const isActive = route ? pathname === route : (!offHome && active === id)
         return (
           <button
             key={id}
-            onClick={() => goSection(id)}
+            onClick={() => (route ? goContact() : goSection(id))}
             aria-label={label}
             aria-current={isActive ? 'page' : undefined}
             style={{

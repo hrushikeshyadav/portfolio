@@ -1,5 +1,6 @@
 import { Suspense, lazy } from 'react'
 import { Outlet } from '@tanstack/react-router'
+import { Analytics } from '@vercel/analytics/react'
 import TopControls from '../components/layout/TopControls'
 import FloatingTabBar from '../components/layout/FloatingTabBar'
 import Footer from '../components/layout/Footer'
@@ -42,6 +43,7 @@ export default function RootLayout() {
       </main>
       <Footer />
       <FloatingTabBar />
+      <Analytics />
     </div>
   )
 }

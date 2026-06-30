@@ -37,7 +37,9 @@ export default function CommandPalette() {
   const [sel, setSel] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
   const navigate = useNavigate()
-  const isOnResume = useRouterState().location.pathname === '/resume'
+  const pathname = useRouterState().location.pathname
+  const isOnResume = pathname === '/resume'
+  const isOnContact = pathname === '/contact'
 
   // — raw scroll (instant when jumping behind a curtain, smooth otherwise) —
   const jumpToId = (id: string, immediate: boolean) => {
@@ -82,13 +84,21 @@ export default function CommandPalette() {
     setTimeout(() => navigate({ to: '/resume' }).then(() => jumpTop(true)), cover)
   }
 
+  const goContact = () => {
+    if (isOnContact) return
+    if (prefersReduced()) { navigate({ to: '/contact' }).then(() => jumpTop(true)); return }
+    fireCurtain('rise', 'Contact')
+    const cover = CURTAIN_COVER_MS.rise ?? 430
+    setTimeout(() => navigate({ to: '/contact' }).then(() => jumpTop(true)), cover)
+  }
+
   const commands: Cmd[] = [
     { id: 'top', label: 'Back to top', keywords: 'home hero start', Icon: ArrowUp, run: () => navWithCurtain('door', 'Top', jumpTop) },
     { id: 'about', label: 'Go to About', keywords: 'intro bio who', Icon: User, run: () => navWithCurtain('door', 'About', (im) => jumpToId('about', im)) },
     { id: 'work', label: 'Go to Work', keywords: 'projects case studies deep dives', Icon: LayoutGrid, run: () => navWithCurtain('shutter', 'Work', (im) => jumpToId('work', im)) },
     { id: 'experience', label: 'Go to Career', keywords: 'experience timeline jobs', Icon: Briefcase, run: () => navWithCurtain('blinds', 'Career', (im) => jumpToId('experience', im)) },
     { id: 'stack', label: 'Go to Stack', keywords: 'skills tech tools', Icon: Layers, run: () => navWithCurtain('split', 'Stack', (im) => jumpToId('stack', im)) },
-    { id: 'contact', label: 'Go to Contact', keywords: 'reach hire email message', Icon: Mail, run: () => navWithCurtain('rise', 'Contact', (im) => jumpToId('contact', im)) },
+    { id: 'contact', label: 'Open Contact', keywords: 'reach hire email message form', Icon: Mail, run: goContact },
     { id: 'resume', label: 'Open Resume', keywords: 'cv pdf download', Icon: FileText, run: goResume },
     { id: 'theme', label: 'Toggle theme', hint: 'light / dark', keywords: 'dark light mode color', Icon: SunMoon, run: () => setTheme(getTheme() === 'dark' ? 'light' : 'dark') },
     { id: 'email', label: 'Copy email', hint: 'yadavhrushikesh21@gmail.com', keywords: 'mail contact address', Icon: Copy, run: () => navigator.clipboard?.writeText('yadavhrushikesh21@gmail.com') },
