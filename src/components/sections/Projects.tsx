@@ -22,8 +22,8 @@ function Panel({ p, i }: { p: Project; i: number }) {
       position: 'relative', flexShrink: 0,
       width: 'clamp(270px, 80vw, 400px)',
       height: '100%',
-      display: 'flex', flexDirection: 'column', justifyContent: 'center',
-      padding: '0 clamp(1.6rem, 3.5vw, 3rem)',
+      display: 'flex', flexDirection: 'column', justifyContent: 'flex-start',
+      padding: 'clamp(2rem, 6vh, 4rem) clamp(1.6rem, 3.5vw, 3rem) 0',
       borderLeft: i === 0 ? 'none' : '1px solid rgba(var(--border-rgb),0.09)',
     }}>
       {/* giant ghost index */}
@@ -50,11 +50,12 @@ function Panel({ p, i }: { p: Project; i: number }) {
           }}>{p.category} · {p.year}</span>
         </div>
 
-        {/* name */}
+        {/* name — reserve 2 lines so titles align row-for-row across panels */}
         <h3 style={{
           fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 800,
           fontSize: 'clamp(2rem, 4.2vw, 3rem)', letterSpacing: '-0.04em',
           color: 'var(--text)', lineHeight: 0.98, margin: '0 0 0.9rem',
+          minHeight: '1.96em', display: 'flex', alignItems: 'center',
         }}>{p.name}</h3>
 
         {/* description */}
