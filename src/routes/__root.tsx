@@ -8,6 +8,10 @@ import SmoothScroll from '../components/ui/SmoothScroll'
 import AuroraBackground from '../components/ui/AuroraBackground'
 import { GlassFilterDefs } from '../components/ui/LiquidGlass'
 import CurtainTransition from '../components/ui/CurtainTransition'
+import ScrollProgress from '../components/ui/ScrollProgress'
+import CommandPalette from '../components/ui/CommandPalette'
+import Spotlight from '../components/ui/Spotlight'
+import EasterEggs from '../components/ui/EasterEggs'
 
 // Three.js is the heaviest dependency — defer the whole ambient scene so the
 // page text paints first and the WebGL chunk streams in afterwards.
@@ -25,7 +29,11 @@ export default function RootLayout() {
         <AmbientScene />
       </Suspense>
       <SmoothScroll />
+      <ScrollProgress />
       <Cursor />
+      <Spotlight />
+      <EasterEggs />
+      <CommandPalette />
       <TopControls />
       <main style={{ position: 'relative', zIndex: 1 }}>
         <Suspense fallback={null}>

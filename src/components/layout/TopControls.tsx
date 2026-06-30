@@ -1,6 +1,10 @@
 import { motion } from 'framer-motion'
+import { Search } from 'lucide-react'
 import { useNavigate, useRouterState } from '@tanstack/react-router'
 import ThemeToggle from '../ui/ThemeToggle'
+
+const isMac = typeof navigator !== 'undefined'
+  && /mac|iphone|ipad/i.test(navigator.platform || navigator.userAgent)
 
 /**
  * Floating chrome that replaces the old header bar: a small identity mark at
@@ -46,6 +50,28 @@ export default function TopControls() {
           display: 'flex', alignItems: 'center', gap: '0.6rem',
         }}
       >
+        {/* command palette opener — discoverability + the only entry point on
+            touch devices that have no ⌘K keyboard shortcut */}
+        <button
+          onClick={() => window.dispatchEvent(new CustomEvent('cmdk:open'))}
+          aria-label="Open command menu"
+          className="glass glass-interactive glass-rim"
+          style={{
+            display: 'flex', alignItems: 'center', gap: 7,
+            height: 40, padding: '0 0.7rem', boxSizing: 'border-box', cursor: 'pointer',
+            ['--glass-radius' as string]: '999px',
+            ['--glass-blur' as string]: '12px',
+            color: 'rgba(var(--text-rgb),0.6)',
+          }}
+        >
+          <Search size={15} />
+          <kbd className="hide-xs" style={{
+            fontFamily: "'DM Mono', monospace", fontSize: '0.66rem', letterSpacing: '0.02em',
+            color: 'rgba(var(--text-rgb),0.45)',
+            border: '1px solid rgba(var(--border-rgb),0.16)', borderRadius: 6, padding: '2px 6px',
+          }}>{isMac ? '⌘K' : 'Ctrl K'}</kbd>
+        </button>
+
         <a href="mailto:yadavhrushikesh21@gmail.com"
           className="glass glass-warm glass-interactive glass-rim hide-xs"
           style={{

@@ -18,7 +18,7 @@ import AnimatedHeading from '../ui/AnimatedHeading'
 function Panel({ p, i }: { p: Project; i: number }) {
   const live = !!p.link
   return (
-    <div style={{
+    <div data-spotlight style={{
       position: 'relative', flexShrink: 0,
       width: 'clamp(270px, 80vw, 400px)',
       height: '100%',
